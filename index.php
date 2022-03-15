@@ -2,6 +2,7 @@
 namespace Api\Index;
 use Api\Library\AmoCrm\Api as Client;
 
+
 define('ROOT', __DIR__);
 
 include ROOT.'/config/amoCrm.php';
@@ -34,7 +35,7 @@ include ROOT.'/Library/AmoCrm/load.php';
 		// $lead->fields['name'] = 'Много денег';
 		// $client->leads()->update($lead);
 		// $lead = $client->leads()->create('Ура');
-		$client->leads()->attachNote($lead,"Качество важно","common");
+		$client->leads()->attachNote('',"Качество важно","common");
 		// Aprint_r($lead);
 
 		// Aprint_r($lead);

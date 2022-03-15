@@ -51,32 +51,10 @@ class AmoApi
 	public function firstAuth()
 	{
 		 // echo "<br>...firstAuth()<br>";
-		// if(file_exists($this->absolutePathTokenFile) && file_get_contents($this->absolutePathTokenFile))
-		// {
-		// 	die('Токен уже есть!');
-		// }
 		$this->domain = $this->dataAmo['domain'];
 
 		$link = 'https://' . $this->domain . '.amocrm.ru/oauth2/access_token'; //Формируем URL для запроса
 
-		/** Соберем данные для запроса */
-		$data = [
-		    'client_id' => $this->dataAmo['cliend_id'],
-		    'client_secret' => $this->dataAmo['cliend_secret'],
-		    'grant_type' => $this->dataAmo['grant_type'],
-		    'widget' => $this->dataAmo['widget'],
-		    'code' => $this->dataAmo['code'],
-		    'redirect_uri' => $this->dataAmo['redirect_uri']
-		];
-	 //    echo "<pre>";
-		// print_r($data);
-		// echo "</pre>";
-
-		/**
-		 * Нам необходимо инициировать запрос к серверу.
-		 * Воспользуемся библиотекой cURL (поставляется в составе PHP).
-		 * Вы также можете использовать и кроссплатформенную программу cURL, если вы не программируете на PHP.
-		 */
 		$curl = curl_init(); //Сохраняем дескриптор сеанса cURL
 		/** Устанавливаем необходимые опции для сеанса cURL  */
 		curl_setopt($curl,CURLOPT_RETURNTRANSFER, true);
@@ -85,7 +63,7 @@ class AmoApi
 		curl_setopt($curl,CURLOPT_HTTPHEADER,['Content-Type:application/json']);
 		curl_setopt($curl,CURLOPT_HEADER, false);
 		curl_setopt($curl,CURLOPT_CUSTOMREQUEST, 'POST');
-		curl_setopt($curl,CURLOPT_POSTFIELDS, json_encode($data));
+		curl_setopt($curl,CURLOPT_POSTFIELDS, json_encode($this->dataAmo['login']));
 		curl_setopt($curl,CURLOPT_SSL_VERIFYPEER, 1);
 		curl_setopt($curl,CURLOPT_SSL_VERIFYHOST, 2);
 		$out = curl_exec($curl); //Инициируем запрос к API и сохраняем ответ в переменную
@@ -158,11 +136,11 @@ class AmoApi
 
 		/** Соберем данные для запроса */
 		$data = [
-			'client_id' => $this->dataAmo['client_id'],
-			'client_secret' =>$this->dataAmo['client_secret'],
+			'client_id' => $this->dataAmo['login']['client_id'],
+			'client_secret' =>$this->dataAmo['login']['client_secret'],
 			'grant_type' => 'refresh_token',
 			'refresh_token' => $this->getRefreshToken(),
-			'redirect_uri' => $this->dataAmo['redirect_uri'],
+			'redirect_uri' => $this->dataAmo['login']['redirect_uri'],
 		];
 
 		/**

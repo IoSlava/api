@@ -1,5 +1,6 @@
 <?php
 namespace Api\Library\AmoCrm;
+use Exception;
 
 class Collection extends Curl
 {
@@ -30,8 +31,22 @@ class Collection extends Curl
 		}
 	}
 
+	// Входной параметр натуральное число
 	public function getById($id)
 	{
+		if(empty($id))
+		{
+			throw new Exception('Передан пустой параметр.');
+		}
+		if(gettype($id) != 'integer')
+		{
+			throw new Exception('Передан тип '.gettype($id).' вместо integer.');
+		}
+
+		if($id <= 0)
+		{
+		    throw new Exception('Передан некорректный ID.');
+		}
 		foreach($this->items as $item)
 		{
 			if($item->getId() == $id) return $item;
@@ -40,7 +55,7 @@ class Collection extends Curl
 	}
 	public function update($item)
 	{
-		if($item === false || empty($item)) echo "Передан не существующий элемент.";
+		if(empty($item)) echo "Передан не существующий элемент.";
 		$data['update'] = [];
 		foreach ($item->fields as $key => $value)
 		{
@@ -75,6 +90,7 @@ class Collection extends Curl
 
 	public function attachTask($item,$text,$duration,$task_type)
 	{
+		if(empty($item)) echo "Передан не существующий элемент.";
 		$task = new Task($text,$duration,$item->getId(),$item->name,$task_type);
 
 		$data['add'] = $task->fields;
@@ -89,6 +105,8 @@ class Collection extends Curl
 
 	public function attachNote($item,$text,$note_type)
 	{
+		if(empty($item)) echo "Передан не существующий элемент.";
+		$checkData->IsEmpty($item,$text,$note_type);
 		$note = new Note($text,$note_type,$item->getId());
 
 		$data['add'] = $note->fields;

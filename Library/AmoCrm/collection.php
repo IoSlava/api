@@ -31,7 +31,6 @@ class Collection extends Curl
 		}
 	}
 
-	// Входной параметр натуральное число
 	public function getById($id)
 	{
 		if(empty($id))
@@ -103,11 +102,11 @@ class Collection extends Curl
 	    $item->task->fields['id'] = $result['_embedded']['tasks'][0]['id'];
 	}
 
-	public function attachNote($item,$text,$note_type)
+	public function attachNote($item,$note_type,$params)
 	{
 		if(empty($item)) echo "Передан не существующий элемент.";
-		$checkData->IsEmpty($item,$text,$note_type);
-		$note = new Note($text,$note_type,$item->getId());
+
+		$note = new Note($note_type,$item->getId(),$params);
 
 		$data['add'] = $note->fields;
 		$item->note = $note;

@@ -7,7 +7,6 @@ require_once('item.php');
 require_once('lead.php');
 require_once('companies.php');
 require_once('curl.php');
-require_once('checkData.php');
 require_once('collection.php');
 require_once('contact.php');
 require_once('api.php');

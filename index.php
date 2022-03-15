@@ -7,6 +7,7 @@ define('ROOT', __DIR__);
 
 include ROOT.'/config/amoCrm.php';
 include ROOT.'/config/site.php';
+include ROOT.'/config/mysql.php';
 include ROOT.'/Library/AmoCrm/load.php';
 ?>
 <!DOCTYPE html>
@@ -35,7 +36,10 @@ include ROOT.'/Library/AmoCrm/load.php';
 		// $lead->fields['name'] = 'Много денег';
 		// $client->leads()->update($lead);
 		// $lead = $client->leads()->create('Ура');
-		$client->leads()->attachNote('',"Качество важно","common");
+		$params = [
+			'text' => 'Привет'
+		];
+		$client->leads()->attachNote($lead,"common",$params);
 		// Aprint_r($lead);
 
 		// Aprint_r($lead);

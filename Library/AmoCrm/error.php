@@ -4,7 +4,7 @@ use Exception;
 
 class Error 
 {
-	public function __construct($code)
+	public function __construct($code,$response)
 	{
 		$code = (int)$code;
 		$errors = [
@@ -16,13 +16,10 @@ class Error
 			502 => 'Bad gateway',
 			503 => 'Service unavailable',
 		];
-		try{
-			if ($code < 200 || $code > 204) {
-			    throw new Exception(isset($errors[$code]) ? $errors[$code] : 'Undefined error', $code);
-			}
-		}
-		catch(Exception $e){
-			    die('<br>Ошибка: ' . $e->getMessage() . PHP_EOL . 'Код ошибки: ' . $e->getCode());
+		if ($code < 200 || $code > 204) {
+			$message = isset($errors[$code]) ? $errors[$code] : 'Undefined error';
+			$message .= " - ".$response['hint'];
+			throw new Exception($message);
 		}		
 	}
 }

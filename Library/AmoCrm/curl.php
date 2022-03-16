@@ -6,8 +6,8 @@ class Curl
 	public function curl($link,$access_token,$method='get',$data=null)
 	{
 		$headers = [
-				"Accept: application/json",
-				'Authorization: Bearer ' . $access_token
+			"Accept: application/json",
+			"Authorization: Bearer " . $access_token
 		];
 		$curl = curl_init(); //Сохраняем дескриптор сеанса cURL
 		curl_setopt($curl,CURLOPT_RETURNTRANSFER, true);
@@ -17,7 +17,7 @@ class Curl
 			curl_setopt($curl,CURLOPT_CUSTOMREQUEST,$method);
 			curl_setopt($curl,CURLOPT_POSTFIELDS,json_encode($data));
 		}	
-		if($access_token == 'null')curl_setopt($curl,CURLOPT_HTTPHEADER,['Content-Type:application/json']);			
+		if($access_token == null)curl_setopt($curl,CURLOPT_HTTPHEADER,['Content-Type:application/json']);			
 		else curl_setopt($curl,CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($curl,CURLOPT_HEADER, false);
 		curl_setopt($curl,CURLOPT_SSL_VERIFYPEER, 1);
@@ -25,7 +25,8 @@ class Curl
 		$out=curl_exec($curl); 
 		$code=curl_getinfo($curl,CURLINFO_HTTP_CODE);
 		curl_close($curl);
-		$error = new Error($code);
-		return $Response=json_decode($out,true);
+		$response=json_decode($out,true);
+		$error = new Error($code,$response);
+		return $response;
 	}
 }

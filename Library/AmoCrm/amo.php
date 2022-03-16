@@ -42,7 +42,7 @@ class AmoApi  extends Curl
 	{
 		$this->domain = $this->dataAmo['domain'];
 		$link = 'https://' . $this->domain . '.amocrm.ru/oauth2/access_token';
-		$response = $this->curl($link,"null","POST",$this->dataAmo['login']);
+		$response = $this->curl($link,null,"POST",$this->dataAmo['login']);
 		$access['access_token'] = $response['access_token']; 
 		$access['refresh_token'] = $response['refresh_token']; 
 		$access['token_type'] = $response['token_type']; 
@@ -90,7 +90,7 @@ class AmoApi  extends Curl
 			'refresh_token' => $this->getRefreshToken(),
 			'redirect_uri' => $this->dataAmo['login']['redirect_uri'],
 		];
-		$response = $this->curl($link,"null","POST",$data);
+		$response = $this->curl($link,null,"POST",$data);
 		if($response) {
 			$response["endTokenTime"] = time() + $response["expires_in"];
 			$this->token=$response;

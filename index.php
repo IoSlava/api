@@ -1,10 +1,7 @@
 <?php
 namespace Api\Index;
 use Api\Library\AmoCrm\Api as Client;
-
-
 define('ROOT', __DIR__);
-
 include ROOT.'/config/amoCrm.php';
 include ROOT.'/Library/AmoCrm/load.php';
 ?>
@@ -39,7 +36,7 @@ include ROOT.'/Library/AmoCrm/load.php';
 			if(!getShowError()) die("Что-то пошло не так!");
 			?>
 			<div class = 'error'>
-			<?= $e; ?>
+			<?= $e; ?> 
 			</div>
 		<?php	
 		}

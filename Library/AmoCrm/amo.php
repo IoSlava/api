@@ -33,11 +33,10 @@ class AmoApi
 
 	public function loadToken()// Загрузит токен, вернет правду
     {
-			if(file_exists($this->absolutePathTokenFile))
-			{
+		if(file_exists($this->absolutePathTokenFile)){
 				$token = file_get_contents($this->absolutePathTokenFile);
-				if($token)
-				{   // Здесь обязательно нужно преобразовывать явно результат json_decode  в массив, иначе access получит тип stdClass
+
+				if($token){   // Здесь обязательно нужно преобразовывать явно результат json_decode  в массив, иначе access получит тип stdClass
 					$this->token = (Array)json_decode($token);
 					echo "Токен есть";
 					// Aprint_r($this->token);
@@ -173,7 +172,6 @@ class AmoApi
 		$response = json_decode($out, true);
 
 		if($response) {
-
 			/* записываем конечное время жизни токена */
 			$response["endTokenTime"] = time() + $response["expires_in"];
 			$this->token=$response;

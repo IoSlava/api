@@ -17,15 +17,13 @@ class Error {
 			    503 => 'Service unavailable',
 			];
 
-			try
-			{
+			try{
 			    /** Если код ответа не успешный - возвращаем сообщение об ошибке  */
 			    if ($code < 200 || $code > 204) {
 			        throw new Exception(isset($errors[$code]) ? $errors[$code] : 'Undefined error', $code);
 			    }
 			}
-			catch(Exception $e)
-			{
+			catch(Exception $e){
 			    die('<br>Ошибка: ' . $e->getMessage() . PHP_EOL . 'Код ошибки: ' . $e->getCode());
 			}		
 	}

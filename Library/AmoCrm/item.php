@@ -27,8 +27,7 @@ class Item
 
 		$this->name = $type;
 
-		foreach ($this->fields as $key => $value) 
-		{
+		foreach ($this->fields as $key => $value) {
 			$this->fields[$key] = $array[$key]; 
 		}
 		return $this;

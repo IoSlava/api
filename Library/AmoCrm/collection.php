@@ -25,39 +25,27 @@ class Collection extends Curl
 		$className ='Api\Library\AmoCrm\\'.$className;
 		$this->className = $className;
 
-		foreach($Response['_embedded'][$type] as $item)
-		{
+		foreach($Response['_embedded'][$type] as $item){
 			$this->items = array_merge($this->items,[new $className($item,$type)]);
 		}
 	}
 
 	public function getById($id)
 	{
-		if(empty($id))
-		{
-			throw new Exception('Передан пустой параметр.');
-		}
-		if(gettype($id) != 'integer')
-		{
-			throw new Exception('Передан тип '.gettype($id).' вместо integer.');
-		}
+		if(empty($id)) throw new Exception('Передан пустой параметр.');
+		if(gettype($id) != 'integer') throw new Exception('Передан тип '.gettype($id).' вместо integer.');
+		if($id <= 0) throw new Exception('Передан некорректный ID.');
 
-		if($id <= 0)
-		{
-		    throw new Exception('Передан некорректный ID.');
-		}
-		foreach($this->items as $item)
-		{
+		foreach($this->items as $item){
 			if($item->getId() == $id) return $item;
 		}
 		return false;
 	}
 	public function update($item)
 	{
-		if(empty($item)) echo "Передан не существующий элемент.";
+		if(empty($item)) throw new Exception('Передан не существующий элемент.');
 		$data['update'] = [];
-		foreach ($item->fields as $key => $value)
-		{
+		foreach ($item->fields as $key => $value){
 			if($key == '_links' || $key == '_embedded') continue;
 			 $data['update'] = array_merge($data['update'],[$key=> $value]);
 		}
@@ -73,10 +61,9 @@ class Collection extends Curl
 	{
 		$item = new $this->className(-1,$this->type);
 		$item->fields['name'] = $name;
-
 		$data['add'] = $item->fields;
 
-		Aprint_r($data);
+		// Aprint_r($data);
 
     	$link='https://'.$this->domain.'.amocrm.ru/api/v4/'.$this->type;
 	    $result = $this->curl($link,$this->access_token,"POST",$data);
@@ -89,12 +76,12 @@ class Collection extends Curl
 
 	public function attachTask($item,$text,$duration,$task_type)
 	{
-		if(empty($item)) echo "Передан не существующий элемент.";
+		if(empty($item)) throw new Exception('Передан не существующий элемент.');
 		$task = new Task($text,$duration,$item->getId(),$item->name,$task_type);
 
 		$data['add'] = $task->fields;
 		$item->task = $task;
-		Aprint_r($data);
+		// Aprint_r($data);
 
     	$link='https://'.$this->domain.'.amocrm.ru/api/v4/'.'tasks';
 	    $result = $this->curl($link,$this->access_token,"POST",$data);
@@ -104,13 +91,13 @@ class Collection extends Curl
 
 	public function attachNote($item,$note_type,$params)
 	{
-		if(empty($item)) echo "Передан не существующий элемент.";
+		if(empty($item)) throw new Exception('Передан не существующий элемент.');
 
 		$note = new Note($note_type,$item->getId(),$params);
 
 		$data['add'] = $note->fields;
 		$item->note = $note;
-		Aprint_r($data);
+		// Aprint_r($data);
 
     	$link='https://'.$this->domain.'.amocrm.ru/api/v4/'.$this->type.'/notes';
 	    $result = $this->curl($link,$this->access_token,"POST",$data);

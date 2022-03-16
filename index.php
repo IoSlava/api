@@ -6,8 +6,6 @@ use Api\Library\AmoCrm\Api as Client;
 define('ROOT', __DIR__);
 
 include ROOT.'/config/amoCrm.php';
-include ROOT.'/config/site.php';
-include ROOT.'/config/mysql.php';
 include ROOT.'/Library/AmoCrm/load.php';
 ?>
 <!DOCTYPE html>
@@ -15,7 +13,7 @@ include ROOT.'/Library/AmoCrm/load.php';
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title><?= $title;?></title>
+		<title>Api</title>
 		<link rel="stylesheet" type="text/css" href="style/index.css">
 	</head>
 <body>
@@ -32,14 +30,19 @@ include ROOT.'/Library/AmoCrm/load.php';
 			$client->saveToken();
 		}	
 
+		// $helllo = "";
+		// $res = $client->leads()->update($helllo);
+		// Aprint_r($res);
 		$lead = $contacts = $client->leads()->getById(28742313);
+		Aprint_r($lead);
+		echo "<br>".gettype($lead).'<br>';
 		// $lead->fields['name'] = 'Много денег';
 		// $client->leads()->update($lead);
 		// $lead = $client->leads()->create('Ура');
-		$params = [
-			'text' => 'Привет'
-		];
-		$client->leads()->attachNote($lead,"common",$params);
+		// $params = [
+		// 	'text' => 'Привет'
+		// ];
+		// $client->leads()->attachTask($lead,"common",300,2);
 		// Aprint_r($lead);
 
 		// Aprint_r($lead);

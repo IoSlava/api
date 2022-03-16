@@ -14,8 +14,7 @@ class Curl
 		curl_setopt($curl,CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl,CURLOPT_USERAGENT,'amoCRM-oAuth-client/2.0');
 		curl_setopt($curl,CURLOPT_URL, $link);
-		if($method != 'get')// Сделать исключение на 
-		{		
+		if($method != 'get'){		
 			curl_setopt($curl,CURLOPT_CUSTOMREQUEST,$method);
 			curl_setopt($curl,CURLOPT_POSTFIELDS,json_encode($data));
 		}	

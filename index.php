@@ -19,47 +19,29 @@ include ROOT.'/Library/AmoCrm/load.php';
 <body>
 	<div class="content">
 	<?php
+
 	function start()
 	{
 		$client = new Client(getConfig());
-
 		if($client->loadToken()){ }
-		else 
-		{
+		else {
 			$client->firstAuth();
 			$client->saveToken();
 		}	
-
-		// $helllo = "";
-		// $res = $client->leads()->update($helllo);
-		// Aprint_r($res);
-		$lead = $contacts = $client->leads()->getById(28742313);
-		Aprint_r($lead);
-		echo "<br>".gettype($lead).'<br>';
-		// $lead->fields['name'] = 'Много денег';
-		// $client->leads()->update($lead);
-		// $lead = $client->leads()->create('Ура');
-		// $params = [
-		// 	'text' => 'Привет'
-		// ];
-		// $client->leads()->attachTask($lead,"common",300,2);
-		// Aprint_r($lead);
-
-		// Aprint_r($lead);
-		//if($lead !== false) $client->leads()->attachNote($lead,"Отдохни","common");
 	}
 
 	function middleware()
 	{
-		try 
-		{
+		try {
 			start();
 		}
-		catch (\Throwable $e) 
-		{
-			echo "<div class = 'error'>";
-			echo $e;
-			echo "</div>";
+		catch (\Throwable $e) {
+			if(!getShowError()) die("Что-то пошло не так!");
+			?>
+			<div class = 'error'>
+			<?= $e; ?>
+			</div>
+		<?php	
 		}
 	}
 

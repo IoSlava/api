@@ -3,7 +3,6 @@ namespace Api\Library\AmoCrm;
 
 class Note
 {
-
 	public $fields = [
         "id" => 0,
         "entity_id" => 0,

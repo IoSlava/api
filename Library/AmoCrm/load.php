@@ -1,6 +1,5 @@
 <?php 
 require_once('error.php');
-require_once('amo.php');
 require_once('note.php');
 require_once('task.php');
 require_once('item.php');
@@ -9,4 +8,5 @@ require_once('companies.php');
 require_once('curl.php');
 require_once('collection.php');
 require_once('contact.php');
+require_once('amo.php');
 require_once('api.php');

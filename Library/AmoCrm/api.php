@@ -2,7 +2,8 @@
 namespace Api\Library\AmoCrm;
 use Exception;
 
-class Api extends AmoApi {
+class Api extends AmoApi 
+{
 
 	protected $leads;
 	protected $companies;

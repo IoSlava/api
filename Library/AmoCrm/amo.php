@@ -1,11 +1,7 @@
 <?php 
-/**
- * 
- */
 namespace Api\Library\AmoCrm;
-use Exception;// Не до конца понял как и что, но помогла избежать ошибки, что Api\Library\AmoCrm\Load\Exception класса нет
 
-class AmoApi  
+class AmoApi  extends Curl
 {
 	protected $token;
 	protected $absolutePathTokenFile = ROOT."/Token/"."token.json";
@@ -16,14 +12,12 @@ class AmoApi
 		$this->dataAmo = $dataAmo;
 	}
 
-	public function saveToken()// Если файла нет, то вернет ложь и не сохранит токен
+	public function saveToken()
 	{
 		if(!file_exists($this->absolutePathTokenFile)) return false;
 		$tokenJsonString = json_encode($this->token);
-			// Пишем содержимое в файл
-			// и флаг LOCK_EX для предотвращения записи данного файла кем-нибудь другим в данное время
 		file_put_contents($this->absolutePathTokenFile, $tokenJsonString,LOCK_EX);
-			return true;
+		return true;
 	}
 
 	public function loadDataAmo()//абстракный метод
@@ -34,68 +28,34 @@ class AmoApi
 	public function loadToken()// Загрузит токен, вернет правду
     {
 		if(file_exists($this->absolutePathTokenFile)){
-				$token = file_get_contents($this->absolutePathTokenFile);
-
-				if($token){   // Здесь обязательно нужно преобразовывать явно результат json_decode  в массив, иначе access получит тип stdClass
-					$this->token = (Array)json_decode($token);
-					echo "Токен есть";
-					// Aprint_r($this->token);
-					$this->loadDataAmo();
-					return true;
-				}
+			$token = file_get_contents($this->absolutePathTokenFile);
+			if($token){
+				$this->token = (Array)json_decode($token);
+				$this->loadDataAmo();
+				return true;
+			}
 		}
 		return false;
 	}
 
 	public function firstAuth()
 	{
-		 // echo "<br>...firstAuth()<br>";
 		$this->domain = $this->dataAmo['domain'];
-
-		$link = 'https://' . $this->domain . '.amocrm.ru/oauth2/access_token'; //Формируем URL для запроса
-
-		$curl = curl_init(); //Сохраняем дескриптор сеанса cURL
-		/** Устанавливаем необходимые опции для сеанса cURL  */
-		curl_setopt($curl,CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($curl,CURLOPT_USERAGENT,'amoCRM-oAuth-client/1.0');
-		curl_setopt($curl,CURLOPT_URL, $link);
-		curl_setopt($curl,CURLOPT_HTTPHEADER,['Content-Type:application/json']);
-		curl_setopt($curl,CURLOPT_HEADER, false);
-		curl_setopt($curl,CURLOPT_CUSTOMREQUEST, 'POST');
-		curl_setopt($curl,CURLOPT_POSTFIELDS, json_encode($this->dataAmo['login']));
-		curl_setopt($curl,CURLOPT_SSL_VERIFYPEER, 1);
-		curl_setopt($curl,CURLOPT_SSL_VERIFYHOST, 2);
-		$out = curl_exec($curl); //Инициируем запрос к API и сохраняем ответ в переменную
-		$code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-		curl_close($curl);
-		/** Теперь мы можем обработать ответ, полученный от сервера. Это пример. Вы можете обработать данные своим способом. */
-		$code = (int)$code;
-		$error = new Error($code);
-
-		/**
-		 * Данные получаем в формате JSON, поэтому, для получения читаемых данных,
-		 * нам придётся перевести ответ в формат, понятный PHP
-		 */
-		$response = json_decode($out, true);
-
-		$access['access_token'] = $response['access_token']; //Access токен
-		$access['refresh_token'] = $response['refresh_token']; //Refresh токен
-		$access['token_type'] = $response['token_type']; //Тип токена
-		$access['expires_in'] = $response['expires_in']; //Через сколько действие токена истекает
+		$link = 'https://' . $this->domain . '.amocrm.ru/oauth2/access_token';
+		$response = $this->curl($link,"null","POST",$this->dataAmo['login']);
+		$access['access_token'] = $response['access_token']; 
+		$access['refresh_token'] = $response['refresh_token']; 
+		$access['token_type'] = $response['token_type']; 
+		$access['expires_in'] = $response['expires_in']; 
 		$access["endTokenTime"] = time() + $response["expires_in"];
-		// echo "<pre>";
-		// print_r($response);s
-		// echo "</pre>";
 		$this->token=$access;
 		$this->loadDataAmo();
 		$this->saveToken();
-		// echo "---------------------------------------------------<br>";
 		return true;
 	}
 	public function IsActual()
 	{
 		if($this->token['endTokenTime'] <= time()) return false;
-
 		return true;
 	}
 
@@ -112,11 +72,6 @@ class AmoApi
 
 	public function getRefreshToken()
 	{
-			// echo "<pre>";
-			// print_r($this->access);
-			// echo "</pre>";
-			// echo "<br>".$this->access['refresh_token'];
-			// var_dump(access['refresh_token']);
 			return $this->token['refresh_token'];
 	}
 
@@ -127,13 +82,7 @@ class AmoApi
 
 	public function updateToken()
 	{
-		// echo "<br>...updateToken()";
-		// echo "<pre>";
-		// print_r($this->dataAmo);
-		// echo "</pre>";
 		$link = 'https://' . $this->dataAmo['domain'] . '.amocrm.ru/oauth2/access_token'; //Формируем URL для запроса
-
-		/** Соберем данные для запроса */
 		$data = [
 			'client_id' => $this->dataAmo['login']['client_id'],
 			'client_secret' =>$this->dataAmo['login']['client_secret'],
@@ -141,38 +90,8 @@ class AmoApi
 			'refresh_token' => $this->getRefreshToken(),
 			'redirect_uri' => $this->dataAmo['login']['redirect_uri'],
 		];
-
-		/**
-		 * Нам необходимо инициировать запрос к серверу.
-		 * Воспользуемся библиотекой cURL (поставляется в составе PHP).
-		 * Вы также можете использовать и кроссплатформенную программу cURL, если вы не программируете на PHP.
-		 */
-		$curl = curl_init(); //Сохраняем дескриптор сеанса cURL
-		/** Устанавливаем необходимые опции для сеанса cURL  */
-		curl_setopt($curl,CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($curl,CURLOPT_USERAGENT,'amoCRM-oAuth-client/1.0');
-		curl_setopt($curl,CURLOPT_URL, $link);
-		curl_setopt($curl,CURLOPT_HTTPHEADER,['Content-Type:application/json']);
-		curl_setopt($curl,CURLOPT_HEADER, false);
-		curl_setopt($curl,CURLOPT_CUSTOMREQUEST, 'POST');
-		curl_setopt($curl,CURLOPT_POSTFIELDS, json_encode($data));
-		curl_setopt($curl,CURLOPT_SSL_VERIFYPEER, 1);
-		curl_setopt($curl,CURLOPT_SSL_VERIFYHOST, 2);
-		$out = curl_exec($curl); //Инициируем запрос к API и сохраняем ответ в переменную
-		$code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-		curl_close($curl);
-		/** Теперь мы можем обработать ответ, полученный от сервера. Это пример. Вы можете обработать данные своим способом. */
-		$code = (int)$code;
-		$error = new Error($code);
-		/**
-		 * Данные получаем в формате JSON, поэтому, для получения читаемых данных,
-		 * нам придётся перевести ответ в формат, понятный PHP
-		 */
-
-		$response = json_decode($out, true);
-
+		$response = $this->curl($link,"null","POST",$data);
 		if($response) {
-			/* записываем конечное время жизни токена */
 			$response["endTokenTime"] = time() + $response["expires_in"];
 			$this->token=$response;
 			$this->saveToken();

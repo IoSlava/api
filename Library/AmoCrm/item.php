@@ -33,7 +33,6 @@ class Item
 		return $this;
 	}
 
-
 	public function getId()
 	{
 		return $this->fields['id'];

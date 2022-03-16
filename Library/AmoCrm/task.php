@@ -3,7 +3,6 @@ namespace Api\Library\AmoCrm;
 
 class Task 
 {
-
 	public $fields = [
         "entity_id" => 0,
         "entity_type" => "",

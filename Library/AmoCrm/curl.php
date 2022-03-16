@@ -9,7 +9,6 @@ class Curl
 				"Accept: application/json",
 				'Authorization: Bearer ' . $access_token
 		];
-
 		$curl = curl_init(); //Сохраняем дескриптор сеанса cURL
 		curl_setopt($curl,CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl,CURLOPT_USERAGENT,'amoCRM-oAuth-client/2.0');
@@ -18,7 +17,8 @@ class Curl
 			curl_setopt($curl,CURLOPT_CUSTOMREQUEST,$method);
 			curl_setopt($curl,CURLOPT_POSTFIELDS,json_encode($data));
 		}	
-		curl_setopt($curl,CURLOPT_HTTPHEADER, $headers);
+		if($access_token == 'null')curl_setopt($curl,CURLOPT_HTTPHEADER,['Content-Type:application/json']);			
+		else curl_setopt($curl,CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($curl,CURLOPT_HEADER, false);
 		curl_setopt($curl,CURLOPT_SSL_VERIFYPEER, 1);
 		curl_setopt($curl,CURLOPT_SSL_VERIFYHOST, 2);

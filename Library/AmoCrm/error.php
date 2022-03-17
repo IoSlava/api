@@ -18,7 +18,8 @@ class Error
 		];
 		if ($code < 200 || $code > 204) {
 			$message = isset($errors[$code]) ? $errors[$code] : 'Undefined error';
-			$message .= " - ".$response['hint'];
+			$message .= isset($response['hint']) ? " - ".$response['hint'] : " ";
+			$message .= isset($response['detail']) ? " - ".$response['detail'] : " ";
 			throw new Exception($message);
 		}		
 	}

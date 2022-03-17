@@ -10,6 +10,19 @@ class Collection extends Curl
 	protected $type;
 	protected $className;
 
+	public function attachTaskToEntity($tasks)
+	{
+		foreach($this->items as $item){
+			$itemID = $item->getId();
+			$itemTask = isset($tasks[$item->name]) ? $tasks[$item->name] : null;
+			if($itemTask == null) continue; 
+			foreach($itemTask as $key => $value){
+				if($itemID != $key) continue;
+				$item->attachTask([$key => $value]);
+			}
+		}
+	}
+
 	public function __construct($domain,$access_token,$type)
 	{
 		$this->access_token = $access_token;
@@ -21,8 +34,19 @@ class Collection extends Curl
 		$className ='Api\Library\AmoCrm\\'.$className;
 		$this->className = $className;
 		foreach($Response['_embedded'][$type] as $item){
-			$this->items = array_merge($this->items,[new $className($item,$type)]);
+			$this->items = array_merge($this->items,[new $className($item,$type,$domain,$access_token)]);
 		}
+		//получить массив task и передать его сущности
+		//написать комментарии
+		$link="https://".$this->domain.".amocrm.ru/api/v4/".'tasks'.'?limit=250';
+		$responseTask = $this->curl($link,$this->access_token);
+		$sortedTask = [];
+		foreach($responseTask['_embedded']['tasks'] as $item){
+			if(empty($item['entity_id']) || $item['entity_type'] != $this->type) continue;
+			$idEntity = $item['entity_id'];
+			$sortedTask[$this->type][$idEntity] = $item; 
+		}
+		$this->attachTaskToEntity($sortedTask);
 	}
 
 	public function getById($id)
@@ -45,7 +69,6 @@ class Collection extends Curl
 		}
 		$link='https://'.$this->domain.'.amocrm.ru/api/v4/'.$this->type;
 		$Response=$this->curl($link,$this->access_token,"PATCH",$data);
-
 		return true;
 
 	}
@@ -65,7 +88,14 @@ class Collection extends Curl
 	public function attachTask($item,$text,$duration,$task_type)
 	{
 		if(empty($item)) throw new Exception('Передан не существующий элемент.');
-		$task = new Task($text,$duration,$item->getId(),$item->name,$task_type);
+		$dataTask = [
+			'text' => $text,
+			'complete_till' => time() + $duration,
+			'entity_id' => $item->getId(),
+			'entity_type' =>$item->name,
+			'task_type' => $task_type 
+		];
+		$task = new Task($dataTask);
 		$data['add'] = $task->fields;
 		$item->task = $task;
     	$link='https://'.$this->domain.'.amocrm.ru/api/v4/'.'tasks';
@@ -76,6 +106,11 @@ class Collection extends Curl
 	public function attachNote($item,$note_type,$params)
 	{
 		if(empty($item)) throw new Exception('Передан не существующий элемент.');
+		$dataNote = [
+	        "entity_id" => $item->getId(),
+	        "note_type" => $note_type,
+	        "params" => $params
+		];
 		$note = new Note($note_type,$item->getId(),$params);
 		$data['add'] = $note->fields;
 		$item->note = $note;

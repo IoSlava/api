@@ -25,6 +25,8 @@ include ROOT.'/Library/AmoCrm/load.php';
 			$client->firstAuth();
 			$client->saveToken();
 		}	
+		$lead = $client->leads()->getById(28095089);
+		//$client->leads()->attachTask($lead,"Dfx",300,2);
 	}
 
 	function middleware()

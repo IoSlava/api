@@ -10,10 +10,8 @@ class Note
         "params" => ""
 	];
 
-	public function __construct($note_type,$entity_id,$params)
+	public function __construct($arrray)
 	{
-		$this->fields['note_type'] = $note_type;
-		$this->fields['entity_id'] = $entity_id;
-		$this->fields['params'] = $params;
+		$this->fields = $arrray;
 	}
 }

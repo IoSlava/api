@@ -53,6 +53,7 @@ class AmoApi  extends Curl
 		$this->saveToken();
 		return true;
 	}
+	
 	public function IsActual()
 	{
 		if($this->token['endTokenTime'] <= time()) return false;

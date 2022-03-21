@@ -16,9 +16,7 @@ include ROOT.'/Library/AmoCrm/load.php';
 <body>
 	<div class="content">
 	<?php
-
-	function start()
-	{
+		$timeLoad = time();
 		$client = new Client(getConfig());
 		if($client->loadToken()){ }
 		else {
@@ -26,30 +24,13 @@ include ROOT.'/Library/AmoCrm/load.php';
 			$client->saveToken();
 		}	
 		$lead = $client->leads()->getById(28095089);
-		//$client->leads()->attachTask($lead,"Dfx",300,2);
-	}
-
-	function middleware()
-	{
-		try {
-			start();
-		}
-		catch (\Throwable $e) {
-			if(!getShowError()) die("Что-то пошло не так!");
-			?>
-			<div class = 'error'>
-			<?= $e; ?> 
-			</div>
-		<?php	
-		}
-	}
-
-	function main()
-	{
-		middleware();
-	}
-
-	main();
+		$params = [
+			'text' => 'lol'
+		];
+		$client->leads()->attachNote($lead,'common',$params);
+		$lead->showNotes();
+		$timeLoad = time() - $timeLoad;
+		echo "Время загрузки - ".$timeLoad. " сек.";
 	?>
 	</div>	
 </body>

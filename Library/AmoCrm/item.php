@@ -21,20 +21,24 @@ class Item extends Curl
 		return $this->name;
 	}
 
+	public function loadNotes($domain,$access_token,$type)
+	{
+		$link="https://".$domain.".amocrm.ru/api/v4/".$type.'/'.$this->fields['id'].'/'.'notes';
+		$response = $this->curl($link,$access_token);
+		$notes = isset($response['_embedded']) ? $response['_embedded'] : null;
+		if($notes == null) return false;
+		foreach($notes as $item){
+			$this->note = array_merge($this->note,[new Note($item)]);
+		}
+		return true;
+	}
+
 	public function __construct($array,$type,$domain,$access_token)
 	{
 		if(!is_array($array)) return false;
-
 		$this->name = $type;
-
 		foreach ($this->fields as $key => $value) {
 			$this->fields[$key] = $array[$key]; 
-		}
-		$link="https://".$domain.".amocrm.ru/api/v4/".$type.'/'.$this->fields['id'].'/'.'notes';
-		$response = $this->curl($link,$access_token);
-		Aprint_r($response);
-		foreach($response['_embedded'] as $item){
-			$this->note = array_merge($this->note,[new Note($item)]);
 		}
 		return $this;
 	}
@@ -44,9 +48,22 @@ class Item extends Curl
 		$this->tasks = array_merge($this->tasks,[new Task($task)]);
 	}
 
+	public function attachNote($note)
+	{
+		$this->note = array_merge($this->note,[new Task($note)]);
+	}
+
 	public function showTasks()
 	{
 		foreach($this->tasks as $item){
+			Aprint_r($item);
+			echo"-----------<br>";
+		}
+	}
+
+	public function showNotes()
+	{
+		foreach($this->note as $item){
 			Aprint_r($item);
 			echo"-----------<br>";
 		}

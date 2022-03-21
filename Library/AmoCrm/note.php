@@ -1,7 +1,7 @@
 <?php
 namespace Api\Library\AmoCrm;
 
-class Note
+class Note  
 {
 	public $fields = [
         "id" => 0,

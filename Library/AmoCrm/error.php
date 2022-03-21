@@ -16,11 +16,18 @@ class Error
 			502 => 'Bad gateway',
 			503 => 'Service unavailable',
 		];
-		if ($code < 200 || $code > 204) {
-			$message = isset($errors[$code]) ? $errors[$code] : 'Undefined error';
-			$message .= isset($response['hint']) ? " - ".$response['hint'] : " ";
-			$message .= isset($response['detail']) ? " - ".$response['detail'] : " ";
-			throw new Exception($message);
-		}		
+		try{
+			if ($code < 200 || $code > 204) {
+				$message = isset($errors[$code]) ? "Ошибка ".$code." - ".$errors[$code] : "Неизвестная ошибка";
+				$message .= "<br>Детали:<br>";
+				$e['text'] = $message;
+				$e['detail'] = $response;
+				throw new Exception($e);
+			}	
+		}	
+		catch(Exception $e){
+			echo $e['text'];
+			Aprint_r($e['detail']);
+		}
 	}
 }

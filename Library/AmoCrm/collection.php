@@ -14,6 +14,7 @@ class Collection extends BaseCollection
 		}
 		return false;
 	}
+
 	public function update($item)
 	{
 		if(empty($item)) throw new Exception('Передан не существующий элемент.');
@@ -22,6 +23,7 @@ class Collection extends BaseCollection
 			if($key == '_links' || $key == '_embedded') continue;
 			 $data['update'] = array_merge($data['update'],[$key=> $value]);
 		}
+		$data['update']['custom_fields_values'] = $item->custom_fields;
 		$link='https://'.$this->domain.'.amocrm.ru/api/v4/'.$this->type;
 		$Response=$this->curl($link,$this->access_token,"PATCH",$data);
 		return true;

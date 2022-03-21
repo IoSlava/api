@@ -6,6 +6,7 @@ namespace Api\Library\AmoCrm;
 class Item extends Curl
 {
 	public $fields;
+	public $custom_fields;
 	protected $id;
 	public $name;
 	public $tasks = [];
@@ -37,8 +38,9 @@ class Item extends Curl
 	{
 		if(!is_array($array)) return false;
 		$this->name = $type;
+		$this->custom_fields = $array['custom_fields_values']; 
 		foreach ($this->fields as $key => $value) {
-			$this->fields[$key] = $array[$key]; 
+			$this->fields[$key] = $array[$key];
 		}
 		return $this;
 	}

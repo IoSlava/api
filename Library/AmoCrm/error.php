@@ -20,14 +20,14 @@ class Error
 			if ($code < 200 || $code > 204) {
 				$message = isset($errors[$code]) ? "Ошибка ".$code." - ".$errors[$code] : "Неизвестная ошибка";
 				$message .= "<br>Детали:<br>";
-				$e['text'] = $message;
-				$e['detail'] = $response;
+				$e = $message;
+				//$e['detail'] = $response;
 				throw new Exception($e);
 			}	
 		}	
 		catch(Exception $e){
-			echo $e['text'];
-			Aprint_r($e['detail']);
+			echo $e;
+			Aprint_r($response);
 		}
 	}
 }

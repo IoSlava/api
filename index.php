@@ -23,12 +23,14 @@ include ROOT.'/Library/AmoCrm/load.php';
 			$client->firstAuth();
 			$client->saveToken();
 		}	
-		$lead = $client->leads()->getById(28095089);
-		$params = [
-			'text' => 'lol'
-		];
-		$client->leads()->attachNote($lead,'common',$params);
-		$lead->showNotes();
+		$lead = $client->leads()->getById(28277453);
+	//	$lead->custom_fields[0]['values'][0]['value'] = "NAMES";
+		$client->leads()->update($lead);
+		// $params = [
+		// 	'text' => 'lol'
+		// ];
+		// $client->leads()->attachNote($lead,'common',$params);
+		// $lead->showNotes();
 		$timeLoad = time() - $timeLoad;
 		echo "Время загрузки - ".$timeLoad. " сек.";
 	?>

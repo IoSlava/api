@@ -23,7 +23,14 @@ class Collection extends BaseCollection
 			if($key == '_links' || $key == '_embedded') continue;
 			 $data['update'] = array_merge($data['update'],[$key=> $value]);
 		}
-		$data['update']['custom_fields_values'] = $item->custom_fields;
+		$custom_fields = [];
+		$step = 0;
+		foreach($item->custom_fields as $field){
+			if(empty($field['values']))continue;
+			$custom_fields[$step] = $field;
+			$step++; 
+		}
+		$data['update']['custom_fields_values'] = $custom_fields;
 		$link='https://'.$this->domain.'.amocrm.ru/api/v4/'.$this->type;
 		$Response=$this->curl($link,$this->access_token,"PATCH",$data);
 		return true;

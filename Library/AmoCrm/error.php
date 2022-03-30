@@ -18,16 +18,19 @@ class Error
 		];
 		try{
 			if ($code < 200 || $code > 204) {
-				$message = isset($errors[$code]) ? "Ошибка ".$code." - ".$errors[$code] : "Неизвестная ошибка";
-				$message .= "<br>Детали:<br>";
-				$e = $message;
-				//$e['detail'] = $response;
-				throw new Exception($e);
+				$message = isset($errors[$code]) ? "Error ".$code." - ".$errors[$code] : "Unknow";
+				$message .= "<br>";
+				throw new Exception($message);
 			}	
 		}	
 		catch(Exception $e){
-			echo $e;
+			echo "<br>";
+			Aecho($e->getMessage());
+			echo "Detail :";
 			Aprint_r($response);
+			echo "<br>";
+			echo ">> <b>".$e->getTraceAsString()."</b>";  
+			exit();
 		}
 	}
 }

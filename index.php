@@ -11,7 +11,7 @@ include ROOT.'/Library/AmoCrm/load.php';
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Api</title>
-		<link rel="stylesheet" type="text/css" href="style/index.css">
+		<link rel="stylesheet" type="text/css" href="style/indexs.css">
 	</head>
 <body>
 	<div class="content">
@@ -24,7 +24,7 @@ include ROOT.'/Library/AmoCrm/load.php';
 			$client->saveToken();
 		}	
 		$lead = $client->leads()->getById(28277453);
-	//	$lead->custom_fields[0]['values'][0]['value'] = "NAMES";
+		$lead->updateCustomFieldById(820263,"YOU");
 		$client->leads()->update($lead);
 		// $params = [
 		// 	'text' => 'lol'

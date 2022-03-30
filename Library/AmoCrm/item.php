@@ -75,4 +75,20 @@ class Item extends Curl
 	{
 		return $this->fields['id'];
 	}
+
+	public function updateCustomFieldById($id,$value)
+	{
+		$time = time();
+		for($i = 0; $i < sizeof($this->custom_fields);$i++){
+			if($this->custom_fields[$i]['field_id'] == $id)$this->custom_fields[$i]['values'][0]['value'] = $value;
+		}
+		Aecho("Время выполнения функции - ".(time() - $time));
+	}
+
+	public function updateCustomFieldByName($name,$value)
+	{
+		for($i = 0; $i < sizeof($this->custom_fields);$i++){
+			if($this->custom_fields[$i]['field_name'] == $name)$this->custom_fields[$i]['values'][0]['value'] = $value;
+		}
+	}
 }

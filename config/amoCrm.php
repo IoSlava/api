@@ -1,13 +1,4 @@
 <?php 
-
-function Aprint_r($array)
-{
-	echo "<pre>";
-	print_r($array);
-	echo "</pre>";
-	return true;
-}
-
 function getConfig()
 {
 	return $AmoConfig = [
@@ -21,14 +12,4 @@ function getConfig()
 			'redirect_uri' => 'https://example.com'
 	    ]
 	];
-}
-
-function getShowError()
-{
-	return $showError = false;
-}
-
-function Aecho($value)
-{
-	echo "<br>".$value."<br>";
 }

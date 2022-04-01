@@ -3,6 +3,7 @@ html {
 }
 body {
   min-height: 100%;
+  --width-border-content: dashed white 20px;
 }
 
 
@@ -14,10 +15,11 @@ body{
 .content{
 	width: 1170px;
 	margin: 0 auto;
-	border-right: dashed white;
-	border-left: dashed white;
+	border-right:  var(--width-border-content);
+	border-left:   var(--width-border-content);
 	height: 100vh;
-	padding: 10px;
+	padding: 20px;
+	color: yellow;
 }
 
 .error{

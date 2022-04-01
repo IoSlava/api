@@ -4,7 +4,6 @@ use Exception;
 
 class Api extends AmoApi 
 {
-
 	protected $leads;
 	protected $companies;
 	protected $contacts;

@@ -24,7 +24,6 @@ class Error
 			}	
 		}	
 		catch(Exception $e){
-			echo "<br>";
 			Aecho($e->getMessage());
 			echo "Detail :";
 			Aprint_r($response);

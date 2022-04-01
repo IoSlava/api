@@ -1,7 +1,18 @@
 <?php
-namespace Api\Index;
 use Api\Library\AmoCrm\Api as Client;
 define('ROOT', __DIR__);
+
+function Aprint_r($array)
+{
+	echo "<pre>";
+	print_r($array);
+	echo "</pre>";
+}
+function Aecho($value)
+{
+	echo "<br>".$value."<br>";
+}
+
 include ROOT.'/config/amoCrm.php';
 include ROOT.'/Library/AmoCrm/load.php';
 ?>
@@ -11,7 +22,7 @@ include ROOT.'/Library/AmoCrm/load.php';
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Api</title>
-		<link rel="stylesheet" type="text/css" href="style/indexs.css">
+		<link rel="stylesheet" type="text/css" href="style/style.css">
 	</head>
 <body>
 	<div class="content">
@@ -23,14 +34,20 @@ include ROOT.'/Library/AmoCrm/load.php';
 			$client->firstAuth();
 			$client->saveToken();
 		}	
-		$lead = $client->leads()->getById(28277453);
-		$lead->updateCustomFieldById(820263,"YOU");
-		$client->leads()->update($lead);
-		// $params = [
-		// 	'text' => 'lol'
-		// ];
-		// $client->leads()->attachNote($lead,'common',$params);
-		// $lead->showNotes();
+		$item = $client->contacts()->getById(46162243);
+		$item->fields['first_name'] = 'Sweet';
+		$params = [
+			'text' => 'Капт территории.'
+		];
+		$client->contacts()->attachNote($item,'common',$params);
+		Aprint_r($item);
+		// $item->fields['name'] = "San Francisco";
+		// $client->companies()->update($item);
+		// $item->fields['name'] = "Groove Stree Gang";
+		// $client->companies()->update($item);
+		// Aprint_r($item);
+		// $lead->updateCustomFieldById(820263,"YOU");
+		//$client->leads()->update($lead);
 		$timeLoad = time() - $timeLoad;
 		echo "Время загрузки - ".$timeLoad. " сек.";
 	?>

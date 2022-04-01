@@ -9,8 +9,6 @@ class Item extends Curl
 	public $custom_fields;
 	protected $id;
 	public $name;
-	public $tasks = [];
-	public $note = [];
 
 	public function getField()
 	{
@@ -22,19 +20,20 @@ class Item extends Curl
 		return $this->name;
 	}
 
-	public function loadNotes($domain,$access_token,$type)
-	{
-		$link="https://".$domain.".amocrm.ru/api/v4/".$type.'/'.$this->fields['id'].'/'.'notes';
-		$response = $this->curl($link,$access_token);
-		$notes = isset($response['_embedded']) ? $response['_embedded'] : null;
-		if($notes == null) return false;
-		foreach($notes as $item){
-			$this->note = array_merge($this->note,[new Note($item)]);
-		}
-		return true;
-	}
+	// public function loadNotes($domain,$access_token,$type)
+	// {
+	// 	$link="https://".$domain.".amocrm.ru/api/v4/".$type.'/'.$this->fields['id'].'/'.'notes';
+	// 	Aprint_r($link);
+	// 	$response = $this->curl($link,$access_token);
+	// 	$notes = isset($response['_embedded']) ? $response['_embedded'] : null;
+	// 	if($notes == null) return false;
+	// 	foreach($notes as $item){
+	// 		$this->note = array_merge($this->note,[new Note($item)]);
+	// 	}
+	// 	return true;
+	// }
 
-	public function __construct($array,$type,$domain,$access_token)
+	public function __construct($array,$type,$domain= null,$access_token = null)
 	{
 		if(!is_array($array)) return false;
 		$this->name = $type;
@@ -52,14 +51,15 @@ class Item extends Curl
 
 	public function attachNote($note)
 	{
-		$this->note = array_merge($this->note,[new Task($note)]);
+
+		$obj = new Note($note);
+		$this->note = array_merge($this->note,[$obj]);
 	}
 
 	public function showTasks()
 	{
 		foreach($this->tasks as $item){
 			Aprint_r($item);
-			echo"-----------<br>";
 		}
 	}
 
@@ -67,7 +67,6 @@ class Item extends Curl
 	{
 		foreach($this->note as $item){
 			Aprint_r($item);
-			echo"-----------<br>";
 		}
 	}
 
@@ -82,7 +81,6 @@ class Item extends Curl
 		for($i = 0; $i < sizeof($this->custom_fields);$i++){
 			if($this->custom_fields[$i]['field_id'] == $id)$this->custom_fields[$i]['values'][0]['value'] = $value;
 		}
-		Aecho("Время выполнения функции - ".(time() - $time));
 	}
 
 	public function updateCustomFieldByName($name,$value)

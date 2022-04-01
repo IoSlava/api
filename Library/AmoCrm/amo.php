@@ -20,12 +20,7 @@ class AmoApi  extends Curl
 		return true;
 	}
 
-	public function loadDataAmo()//абстракный метод
-	{
-		return true;
-	}
-
-	public function loadToken()// Загрузит токен, вернет правду
+	public function loadToken()
     {
 		if(file_exists($this->absolutePathTokenFile)){
 			$token = file_get_contents($this->absolutePathTokenFile);
@@ -73,7 +68,7 @@ class AmoApi  extends Curl
 
 	public function getRefreshToken()
 	{
-			return $this->token['refresh_token'];
+		return $this->token['refresh_token'];
 	}
 
 	public function getDomain()

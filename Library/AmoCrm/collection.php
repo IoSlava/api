@@ -25,10 +25,12 @@ class Collection extends BaseCollection
 		}
 		$custom_fields = [];
 		$step = 0;
-		foreach($item->custom_fields as $field){
-			if(empty($field['values']))continue;
-			$custom_fields[$step] = $field;
-			$step++; 
+		if(!empty($item->custom_fields)){
+			foreach($item->custom_fields as $field){
+				if(empty($field['values']))continue;
+				$custom_fields[$step] = $field;
+				$step++; 
+			}
 		}
 		$data['update']['custom_fields_values'] = $custom_fields;
 		$link='https://'.$this->domain.'.amocrm.ru/api/v4/'.$this->type;
@@ -40,7 +42,7 @@ class Collection extends BaseCollection
 	public function create($name)
 	{
 		if(empty($name)) throw new Exception('Передана пустая строка!');
-		if(gettype($id) != 'string') throw new Exception('Передан тип '.gettype($id).' вместо string.');
+		if(gettype($name) != 'string') throw new Exception('Передан тип '.gettype($name).' вместо string.');
 		$item = new $this->className(-1,$this->type);
 		$item->fields['name'] = $name;
 		$data['add'] = $item->fields;

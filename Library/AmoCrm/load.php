@@ -5,7 +5,6 @@ require_once('note.php');
 require_once('task.php');
 require_once('item.php');
 require_once('lead.php');
-require_once('baseCollection.php');
 require_once('companies.php');
 require_once('collection.php');
 require_once('contact.php');

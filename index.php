@@ -38,21 +38,6 @@ include ROOT.'/Library/AmoCrm/load.php';
 			$client->firstAuth();
 			$client->saveToken();
 		}	
-		// $item = $client->contacts()->getById(46162243);
-		// $item->fields['first_name'] = 'Sweet';
-		// $params = [
-		// 	'text' => 'Капт территории.'
-		// ];
-		// $client->contacts()->attachNote($item,'common',$params);
-		// Aprint_r($item);
-		// $item->fields['name'] = "San Francisco";
-		// $client->companies()->update($item);
-		// $item->fields['name'] = "Groove Stree Gang";
-		// $client->companies()->update($item);
-		// Aprint_r($item);
-		// $lead->updateCustomFieldById(820263,"YOU");
-		//$client->leads()->update($lead);
-
 
 		function Test1($client,$n,$id)
 		{
@@ -206,7 +191,6 @@ include ROOT.'/Library/AmoCrm/load.php';
 		// Test6($client,2,45745827,181759,'Кастомка');	
 		// Test6($client,3,46042538,181759,'Кастомка');	
 		
-
 		$timeLoad = time() - $timeLoad;
 		echo "Время загрузки - ".$timeLoad. " сек.";
 	?>

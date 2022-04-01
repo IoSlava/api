@@ -53,14 +53,7 @@ class Collection extends Curl
 		// Добавление изменений для кастомных полей, если поле не пустое
 		if(!empty($item->custom_fields)){
 			foreach($item->custom_fields as $field){
-				if(empty($field['values']))continue;
-				// Удаление полей с пустыми значениями
-				foreach($field['values'][0] as $value){
-					if(empty($value)){
-						unset($value);
-					}
-					Aprint_r($value);
-				}
+
 				$custom_fields[$step] = $field;
 				$step++; 
 			}

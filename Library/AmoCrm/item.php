@@ -9,30 +9,17 @@ class Item extends Curl
 	public $custom_fields;
 	protected $id;
 	public $name;
-
+	// Получение кастомных полей
 	public function getField()
 	{
 		return $this->$custom_fields;
 	}
-
+	// Получение наименования экземпляра сущности
 	public function getName()
 	{
 		return $this->name;
 	}
-
-	// public function loadNotes($domain,$access_token,$type)
-	// {
-	// 	$link="https://".$domain.".amocrm.ru/api/v4/".$type.'/'.$this->fields['id'].'/'.'notes';
-	// 	Aprint_r($link);
-	// 	$response = $this->curl($link,$access_token);
-	// 	$notes = isset($response['_embedded']) ? $response['_embedded'] : null;
-	// 	if($notes == null) return false;
-	// 	foreach($notes as $item){
-	// 		$this->note = array_merge($this->note,[new Note($item)]);
-	// 	}
-	// 	return true;
-	// }
-
+	// Заполнение объекта данными экземпляра сущности
 	public function __construct($array,$type,$domain= null,$access_token = null)
 	{
 		if(!is_array($array)) return false;
@@ -43,46 +30,19 @@ class Item extends Curl
 		}
 		return $this;
 	}
-
-	public function attachTask($task)
-	{
-		$this->tasks = array_merge($this->tasks,[new Task($task)]);
-	}
-
-	public function attachNote($note)
-	{
-
-		$obj = new Note($note);
-		$this->note = array_merge($this->note,[$obj]);
-	}
-
-	public function showTasks()
-	{
-		foreach($this->tasks as $item){
-			Aprint_r($item);
-		}
-	}
-
-	public function showNotes()
-	{
-		foreach($this->note as $item){
-			Aprint_r($item);
-		}
-	}
-
+	// Получение id встроенного поля
 	public function getId()
 	{
 		return $this->fields['id'];
 	}
-
+	// Изменения кастомного поля по id
 	public function updateCustomFieldById($id,$value)
 	{
-		$time = time();
 		for($i = 0; $i < sizeof($this->custom_fields);$i++){
 			if($this->custom_fields[$i]['field_id'] == $id)$this->custom_fields[$i]['values'][0]['value'] = $value;
 		}
 	}
-
+	// Изменения кастомного поля по наименованию
 	public function updateCustomFieldByName($name,$value)
 	{
 		for($i = 0; $i < sizeof($this->custom_fields);$i++){

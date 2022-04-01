@@ -6,12 +6,12 @@ class AmoApi  extends Curl
 	protected $token;
 	protected $absolutePathTokenFile = ROOT."/Token/"."token.json";
 	protected $dataAmo;
-
+	// Получение данных для подключения к AmoCrm из конфига
 	public function __construct($dataAmo)
 	{
 		$this->dataAmo = $dataAmo;
 	}
-
+	// Сохранение токена файл, если последний существует
 	public function saveToken()
 	{
 		if(!file_exists($this->absolutePathTokenFile)) return false;
@@ -19,7 +19,7 @@ class AmoApi  extends Curl
 		file_put_contents($this->absolutePathTokenFile, $tokenJsonString,LOCK_EX);
 		return true;
 	}
-
+	// Загрузка токена из файла, при условии, что файл непустой и существует
 	public function loadToken()
     {
 		if(file_exists($this->absolutePathTokenFile)){
@@ -32,11 +32,12 @@ class AmoApi  extends Curl
 		}
 		return false;
 	}
-
+    // Первичаня авторизация
 	public function firstAuth()
 	{
 		$this->domain = $this->dataAmo['domain'];
 		$link = 'https://' . $this->domain . '.amocrm.ru/oauth2/access_token';
+		// Получение ответа на запрос, который делает функция curl
 		$response = $this->curl($link,null,"POST",$this->dataAmo['login']);
 		$access['access_token'] = $response['access_token']; 
 		$access['refresh_token'] = $response['refresh_token']; 
@@ -48,34 +49,28 @@ class AmoApi  extends Curl
 		$this->saveToken();
 		return true;
 	}
-	
+	// Получение данных для подключения к AmoCrm
+	public function getDomain()
+	{
+		return $this->dataAmo['domain'];
+	}
+	// Проверка токена на его актуальность
 	public function IsActual()
 	{
 		if($this->token['endTokenTime'] <= time()) return false;
 		return true;
 	}
-
-	public function putToken($token)
-	{
-		$this->token = $access;
-		$this->saveToken();
-	}
-
+	// Получение access токена
 	public function getAccessToken()
 	{
 		return $this->token['access_token'];
 	}
-
+	// Получение refresh токена
 	public function getRefreshToken()
 	{
 		return $this->token['refresh_token'];
 	}
-
-	public function getDomain()
-	{
-		return $this->dataAmo['domain'];
-	}
-
+    // Обновление токена, при успешном запросе сохранение его в файл 
 	public function updateToken()
 	{
 		$link = 'https://' . $this->dataAmo['domain'] . '.amocrm.ru/oauth2/access_token'; //Формируем URL для запроса
@@ -88,6 +83,7 @@ class AmoApi  extends Curl
 		];
 		$response = $this->curl($link,null,"POST",$data);
 		if($response) {
+			// Установление времени окончания жизни токена
 			$response["endTokenTime"] = time() + $response["expires_in"];
 			$this->token=$response;
 			$this->saveToken();

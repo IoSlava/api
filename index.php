@@ -1,13 +1,14 @@
 <?php
 use Api\Library\AmoCrm\Api as Client;
 define('ROOT', __DIR__);
-
+// Функция для 'красивого' вывода массиово и объектов
 function Aprint_r($array)
 {
 	echo "<pre>";
 	print_r($array);
 	echo "</pre>";
 }
+// Вывод значения с переносом до и после строки
 function Aecho($value)
 {
 	echo "<br>".$value."<br>";
@@ -38,66 +39,67 @@ include ROOT.'/Library/AmoCrm/load.php';
 			$client->firstAuth();
 			$client->saveToken();
 		}	
-
+		// Тесты на нахождение сущностей по id
 		function Test1($client,$n,$id)
 		{
 			switch($n){
 				case 1: 
-				$item = $client->leads()->getById($id);
-				Aprint_r($item);
-				break;
+					$item = $client->leads()->getById($id);
+					Aprint_r($item);
+					break;
 				case 2: 
-				$item = $client->contacts()->getById($id);
-				Aprint_r($item);
-				break;
+					$item = $client->contacts()->getById($id);
+					Aprint_r($item);
+					break;
 				case 3: 
-				$item = $client->companies()->getById($id);
-				Aprint_r($item);
-				break;								
+					$item = $client->companies()->getById($id);
+					Aprint_r($item);
+					break;								
 			}
 		}
+		// Тесты на изменение полей сущностей
 		function Test2($client,$n,$id,$name)
 		{
 			switch($n){
 				case 1: 
-				$item = $client->leads()->getById($id);
-			    $item->fields['name'] = $name;
-			    $client->leads()->update($item);
-				Aprint_r($item);
-				break;
+					$item = $client->leads()->getById($id);
+				    $item->fields['name'] = $name;
+				    $client->leads()->update($item);
+					Aprint_r($item);
+					break;
 				case 2: 
-				$item = $client->contacts()->getById($id);
-			    $item->fields['first_name'] = $name;
-			    $client->contacts()->update($item);
-				Aprint_r($item);
-				break;
+					$item = $client->contacts()->getById($id);
+				    $item->fields['first_name'] = $name;
+				    $client->contacts()->update($item);
+					Aprint_r($item);
+					break;
 				case 3: 
-				$item = $client->companies()->getById($id);
-			    $item->fields['name'] = $name;
-			    $client->companies()->update($item);
-				Aprint_r($item);
-				break;								
+					$item = $client->companies()->getById($id);
+				    $item->fields['name'] = $name;
+				    $client->companies()->update($item);
+					Aprint_r($item);
+					break;								
 			}
 		}
-
+		// Тесты на создание сущностей 
 		function Test3($client,$n,$name)
 		{
 			switch($n){
 				case 1: 
-				$item = $client->leads()->create($name);
-				Aprint_r($item);
-				break;
+					$item = $client->leads()->create($name);
+					Aprint_r($item);
+					break;
 				case 2: 
-				$item = $client->contacts()->create($name);
-				Aprint_r($item);
-				break;
+					$item = $client->contacts()->create($name);
+					Aprint_r($item);
+					break;
 				case 3: 
-				$item = $client->companies()->create($name);
-				Aprint_r($item);
-				break;								
+					$item = $client->companies()->create($name);
+					Aprint_r($item);
+					break;								
 			}
 		}
-
+		// Тесты на добавление примечания к сущностям
 		function Test4($client,$n,$id,$text)
 		{
 			$params = [
@@ -105,15 +107,15 @@ include ROOT.'/Library/AmoCrm/load.php';
 			];
 			switch($n){
 				case 1: 
-				$item = $client->leads()->getById($id);
-			    $client->leads()->attachNote($item,'common',$params);
-				Aprint_r($item);
-				break;
+					$item = $client->leads()->getById($id);
+				    $client->leads()->attachNote($item,'common',$params);
+					Aprint_r($item);
+					break;
 				case 2: 
-				$item = $client->contacts()->getById($id);
-			    $client->contacts()->attachNote($item,'common',$params);
-				Aprint_r($item);
-				break;
+					$item = $client->contacts()->getById($id);
+				    $client->contacts()->attachNote($item,'common',$params);
+					Aprint_r($item);
+					break;
 				case 3: 
 				$item = $client->companies()->getById($id);
 			    $client->companies()->attachNote($item,'common',$params);
@@ -121,53 +123,53 @@ include ROOT.'/Library/AmoCrm/load.php';
 				break;								
 			}
 		}		
-
+		// Тесты на добавление задачи к сущностям
 		function Test5($client,$n,$id,$text)
 		{
 			switch($n){
 				case 1: 
-				$item = $client->leads()->getById($id);
-			    $client->leads()->attachTask($item,$text,300,2);
-				Aprint_r($item);
-				break;
+					$item = $client->leads()->getById($id);
+				    $client->leads()->attachTask($item,$text,300,2);
+					Aprint_r($item);
+					break;
 				case 2: 
-				$item = $client->contacts()->getById($id);
-			    $client->contacts()->attachTask($item,$text,300,2);
-				Aprint_r($item);
-				break;
+					$item = $client->contacts()->getById($id);
+				    $client->contacts()->attachTask($item,$text,300,2);
+					Aprint_r($item);
+					break;
 				case 3: 
-				$item = $client->companies()->getById($id);
-			    $client->companies()->attachTask($item,$text,300,2);
-				Aprint_r($item);
-				break;								
+					$item = $client->companies()->getById($id);
+				    $client->companies()->attachTask($item,$text,300,2);
+					Aprint_r($item);
+					break;								
 			}
 		}
-
-		function Test6($client,$n,$id,$idCustom,$value)
+		// Тесты на изменение значения кастомного поля
+		function Test6($client,$n,$id,$idCustom,$value,$index)
 		{
 			switch($n){
 				case 1: 
-				$item = $client->leads()->getById($id);
-				$item->updateCustomFieldById($idCustom,$value);
-			    $client->leads()->update($item);
-				Aprint_r($item);
-				break;
+					$item = $client->leads()->getById($id);
+					$item->updateCustomFieldById($idCustom,$value,$index);
+				    $client->leads()->update($item);
+					Aprint_r($item);				
+					break;
 				case 2: 
-				$item = $client->contacts()->getById($id);
-				$item->updateCustomFieldById($idCustom,$value);
-			    $client->contacts()->update($item);
-				Aprint_r($item);
-				break;
+					$item = $client->contacts()->getById($id);
+					$item->updateCustomFieldById($idCustom,$value,$index);
+				    $client->contacts()->update($item);
+					Aprint_r($item);
+					break;
 				case 3: 
-				$item = $client->companies()->getById($id);
-				$item->updateCustomFieldById($idCustom,$value);
-			    $client->companies()->update($item);
-				Aprint_r($item);
-				break;								
+					$item = $client->companies()->getById($id);
+					$item->updateCustomFieldById($idCustom,$value,$index);
+				    $client->companies()->update($item);
+					Aprint_r($item);
+					break;								
 			}
 		}		
 
-		//Test1($client,1,28781491);
+		// Test1($client,1,28781491);
 		// Test1($client,2,46162243);
 		// Test1($client,3,46162133);
 
@@ -187,9 +189,9 @@ include ROOT.'/Library/AmoCrm/load.php';
 		// Test5($client,2,46162243,'Сделай');	
 		// Test5($client,3,46162133,'Сделай');			
 
-		Test6($client,1,28224333,820449,'Кастомка');
-		// Test6($client,2,45745827,181759,'Кастомка');	
-		// Test6($client,3,46042538,181759,'Кастомка');	
+		// Test6($client,1,28224333,820449,'Новый текст',0);
+		// Test6($client,2,45745827,181759,'Кастомка',0);	
+		// Test6($client,3,46042538,181759,'Кастомка',0);	
 		
 		$timeLoad = time() - $timeLoad;
 		echo "Время загрузки - ".$timeLoad. " сек.";

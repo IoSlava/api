@@ -3,6 +3,7 @@ require_once('error.php');
 require_once('curl.php');
 require_once('note.php');
 require_once('task.php');
+require_once('customField.php');
 require_once('item.php');
 require_once('lead.php');
 require_once('companies.php');

@@ -6,7 +6,7 @@ namespace Api\Library\AmoCrm;
 class Item extends Curl
 {
 	public $fields;
-	public $custom_fields;
+	public $custom_fields = [];
 	protected $id;
 	public $name;
 	// Получение кастомных полей
@@ -24,7 +24,11 @@ class Item extends Curl
 	{
 		if(!is_array($array)) return false;
 		$this->name = $type;
-		$this->custom_fields = $array['custom_fields_values']; 
+		if(!empty($array['custom_fields_values'])){
+			foreach($array['custom_fields_values'] as $item){
+				$this->custom_fields = array_merge($this->custom_fields,[new Custom($item)]);
+			}
+		} 
 		foreach ($this->fields as $key => $value) {
 			$this->fields[$key] = $array[$key];
 		}
@@ -36,17 +40,26 @@ class Item extends Curl
 		return $this->fields['id'];
 	}
 	// Изменения кастомного поля по id
-	public function updateCustomFieldById($id,$value)
+	public function updateCustomFieldById($id,$value,$index)
 	{
 		for($i = 0; $i < sizeof($this->custom_fields);$i++){
-			if($this->custom_fields[$i]['field_id'] == $id)$this->custom_fields[$i]['values'][0]['value'] = $value;
+			if($this->custom_fields[$i]->getId() == $id)$this->custom_fields[$i]->setValue($value,$index);
 		}
 	}
 	// Изменения кастомного поля по наименованию
-	public function updateCustomFieldByName($name,$value)
+	public function updateCustomFieldByName($name,$value,$index)
 	{
 		for($i = 0; $i < sizeof($this->custom_fields);$i++){
-			if($this->custom_fields[$i]['field_name'] == $name)$this->custom_fields[$i]['values'][0]['value'] = $value;
+			if($this->custom_fields[$i]->getName() == $name)$this->custom_fields[$i]->setValue($value,$index);
 		}
+	}
+	// Получение массива кастомных полей
+	public function getCustom()
+	{
+		$result = [];
+		foreach($this->custom_fields as $field){
+			$result = array_merge($result,[$field->getFields()]);
+		}
+		return $result;
 	}
 }

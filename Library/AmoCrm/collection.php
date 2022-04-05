@@ -48,19 +48,8 @@ class Collection extends Curl
 			if($key == '_links' || $key == '_embedded') continue;
 			 $data['update'] = array_merge($data['update'],[$key=> $value]);
 		}
-		$custom_fields = [];
-		$step = 0;
-		// Добавление изменений для кастомных полей, если поле не пустое
-		if(!empty($item->custom_fields)){
-			foreach($item->custom_fields as $field){
-
-				$custom_fields[$step] = $field;
-				$step++; 
-			}
-		}
-		$data['update']['custom_fields_values'] = $custom_fields;
-
-		Aprint_r($data);
+		// Добавление изменений для кастомных полей
+		$data['update']['custom_fields_values'] = $item->getCustom();
 		$link='https://'.$this->domain.'.amocrm.ru/api/v4/'.$this->type;
 		$Response=$this->curl($link,$this->access_token,"PATCH",$data);
 		return true;

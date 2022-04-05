@@ -4,7 +4,7 @@ use Exception;
 
 class Error 
 {
-	public function __construct($code,$response)
+	public function __construct($code, $response)
 	{   
 		// Массив с кодами ответов на запрос, которые указывают на ошибку
 		$code = (int)$code;
@@ -18,7 +18,7 @@ class Error
 			503 => 'Service unavailable',
 		];
 		// Проверка кода ответа, если код, указывает на ошибку, происходит генерация исключения
-		try{
+		try {
 			if ($code < 200 || $code > 204) {
 				$message = isset($errors[$code]) ? "Error ".$code." - ".$errors[$code] : "Unknow";
 				$message .= "<br>";
@@ -26,7 +26,7 @@ class Error
 			}	
 		}	
 		// Вывод информации об ошибке 
-		catch(Exception $e){
+		catch (Exception $e) {
 			Aecho($e->getMessage());
 			echo "Detail :";
 			Aprint_r($response);

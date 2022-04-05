@@ -35,7 +35,6 @@ include ROOT.'/Library/AmoCrm/load.php';
 		if($client->loadToken()){ }
 		// Иначе: происходит первичная авторизация и сохранение токена в файл	
 		else {
-
 			$client->firstAuth();
 			$client->saveToken();
 		}	

@@ -25,15 +25,15 @@ class Api extends AmoApi
 	// Проверка актуальности токена, при выполнении последнего условия, возврат переданного объекта
 	public function middleware($object)
 	{
-		if(!$this->IsActual()) $this->updateToken();
+		if (!$this->IsActual()) $this->updateToken();
 		return $object;
 	}
 	// Проверка актуальности токена, при выполнении последнего условия, создания объектов коллекций
 	public function loadDataAmo()
 	{
-		if(!$this->IsActual()) $this->updateToken();
-		$this->leads = new Collection($this->getDomain(),$this->getAccessToken(),"leads");
-		$this->companies = new Collection($this->getDomain(),$this->getAccessToken(),"companies");
-		$this->contacts = new Collection($this->getDomain(),$this->getAccessToken(),"contacts");
+		if (!$this->IsActual()) $this->updateToken();
+		$this->leads = new Collection($this->getDomain(), $this->getAccessToken(), "leads");
+		$this->companies = new Collection($this->getDomain(), $this->getAccessToken(), "companies");
+		$this->contacts = new Collection($this->getDomain(), $this->getAccessToken(), "contacts");
 	}
 }

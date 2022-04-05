@@ -14,7 +14,7 @@ class AmoApi  extends Curl
 	// Сохранение токена файл, если последний существует
 	public function saveToken()
 	{
-		if(!file_exists($this->absolutePathTokenFile)) return false;
+		if (!file_exists($this->absolutePathTokenFile)) return false;
 		$tokenJsonString = json_encode($this->token);
 		file_put_contents($this->absolutePathTokenFile, $tokenJsonString,LOCK_EX);
 		return true;
@@ -22,9 +22,9 @@ class AmoApi  extends Curl
 	// Загрузка токена из файла, при условии, что файл непустой и существует
 	public function loadToken()
     {
-		if(file_exists($this->absolutePathTokenFile)){
+		if (file_exists($this->absolutePathTokenFile)) {
 			$token = file_get_contents($this->absolutePathTokenFile);
-			if($token){
+			if ($token) {
 				$this->token = (Array)json_decode($token);
 				$this->loadDataAmo();
 				return true;
@@ -57,7 +57,7 @@ class AmoApi  extends Curl
 	// Проверка токена на его актуальность
 	public function IsActual()
 	{
-		if($this->token['endTokenTime'] <= time()) return false;
+		if ($this->token['endTokenTime'] <= time()) return false;
 		return true;
 	}
 	// Получение access токена
@@ -82,7 +82,7 @@ class AmoApi  extends Curl
 			'redirect_uri' => $this->dataAmo['login']['redirect_uri'],
 		];
 		$response = $this->curl($link,null,"POST",$data);
-		if($response) {
+		if ($response) {
 			// Установление времени окончания жизни токена
 			$response["endTokenTime"] = time() + $response["expires_in"];
 			$this->token=$response;

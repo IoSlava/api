@@ -4,13 +4,32 @@ namespace Api\Library\AmoCrm;
 class AmoApi  extends Curl
 {
 	protected $token;
-	protected $absolutePathTokenFile = ROOT."/Token/"."token.json";
+	protected $absolutePathTokenFile;
 	protected $dataAmo;
 	// Получение данных для подключения к AmoCrm из конфига
 	public function __construct($dataAmo)
 	{
 		$this->dataAmo = $dataAmo;
+		$this->createFolder();
+		$this->createFile();
 	}
+
+	public function createFolder()
+	{
+		$domain = $this->getDomain();
+		$nameFolder = ROOT."/Token/".$domain;
+		mkdir($nameFolder);
+		$this->absolutePathTokenFile = $nameFolder."/token.json";
+	}
+
+	public function createFile()
+	{
+		// Открываем файл в нужном нам режиме. Нам же, нужно его создать и что то записать.
+		$fp = fopen("token.json", "w");
+		fwrite($fp, "");
+		fclose($fp);
+	}
+
 	// Сохранение токена файл, если последний существует
 	public function saveToken()
 	{
@@ -33,11 +52,18 @@ class AmoApi  extends Curl
 		return false;
 	}
     // Первичаня авторизация
-	public function firstAuth()
+	public function firstAuth($code)
 	{
 		$this->domain = $this->dataAmo['domain'];
 		$link = 'https://' . $this->domain . '.amocrm.ru/oauth2/access_token';
 		// Получение ответа на запрос, который делает функция curl
+		$login = [
+			'client_id' => $this->dataAmo['client_id'],
+			'client_secret' => $this->dataAmo['client_secret'],
+			'redirect_uri' => $this->dataAmo['redirect_uri'],
+			'grant_type' => 'authorization_code',
+			'code' => $code
+		];
 		$response = $this->curl($link,null,"POST",$this->dataAmo['login']);
 		$access['access_token'] = $response['access_token']; 
 		$access['refresh_token'] = $response['refresh_token']; 

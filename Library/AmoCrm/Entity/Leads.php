@@ -1,7 +1,7 @@
 <?php 
 namespace Api\Library\AmoCrm\Entity;
 use  Api\Library\AmoCrm\Services\CustomFields;
-
+use Api\Library\AmoCrm\Collection\BaseCollection;
 
 class Leads 
 {
@@ -17,12 +17,15 @@ class Leads
 
 	public $custom_fields = [];
 
+	public $tasks;
+	public $notes;
+
 	public function __construct()
 	{
-
+		$this->tasks = new baseCollection();
 	}
 
-	public function setField($array)
+	public function setFields($array)
 	{
 		if (!is_array($array)) return false;
 
@@ -49,5 +52,20 @@ class Leads
 			$result = array_merge($result, [$field->getFields()]);
 		}
 		return $result;
+	}
+
+	// Изменения кастомного поля по id
+	public function updateCustomFieldById($id, $value, $index)
+	{
+		for ($i = 0; $i < sizeof($this->custom_fields); $i++){
+			if ($this->custom_fields[$i]->getId() == $id)$this->custom_fields[$i]->setValue($value,$index);
+		}
+	}
+	// Изменения кастомного поля по наименованию
+	public function updateCustomFieldByName($name, $value, $index)
+	{
+		for ($i = 0; $i < sizeof($this->custom_fields); $i++) {
+			if ($this->custom_fields[$i]->getName() == $name)$this->custom_fields[$i]->setValue($value, $index);
+		}
 	}
 }

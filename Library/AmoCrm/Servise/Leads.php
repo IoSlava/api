@@ -2,6 +2,8 @@
 namespace Api\Library\AmoCrm\Services;
 use Api\Library\AmoCrm\Curl;
 use Api\Library\AmoCrm\Entity\Leads as Entity;
+use Api\Library\AmoCrm\Entity\Tasks;
+use Api\Library\AmoCrm\Entity\Notes;
 
 class Leads 
 {
@@ -26,7 +28,7 @@ class Leads
 		} 
 		//Aprint_r($response);
 		$lead = new Entity();
-		$lead->setField($response);
+		$lead->setFields($response);
 		return $lead;
 	}
 
@@ -52,6 +54,7 @@ class Leads
 	// Создание экземпляра сущности 
 	public function create($name)
 	{
+		if (!$this->client->IsActual()) $this->client->updateToken();
 		if (empty($name)) throw new Exception('Передана пустая строка!');
 		// Генерация исключение, если передан не верный тип
 		if (gettype($name) != 'string') throw new Exception('Передан тип '.gettype($name).' вместо string.');
@@ -72,20 +75,42 @@ class Leads
 	// Прикрепление задачи к экземпляру сущности
 	public function attachTask($item, string $text, int $duration, int $task_type)
 	{
+		if (!$this->client->IsActual()) $this->client->updateToken();
 		if (empty($item)) throw new Exception('Передан не существующий элемент.');
 		$dataTask = [
 			'text' => $text,
 			'complete_till' => time() + $duration,
-			'entity_id' => $item->getId(),
-			'entity_type' =>$item->name,
+			'entity_id' => $item->getID(),
+			'entity_type' =>'leads',
 			'task_type' => $task_type 
 		];
-		$task = new Task($dataTask);
+		$task = new Tasks();
+		$task->setFields($dataTask);
 		$data['add'] = $task->fields;
-		$item->task = $task;
+		$item->tasks->push($task);
     	$link='https://'.$this->client->getDomain().'.amocrm.ru/api/v4/'.'tasks';
 	    $result = Curl::curl($link,$this->client->getAccessToken(), "POST", $data);
 	    // Сохранения id, только что созданной задачи в массив объекта экземпляра сущности
-	    $item->task->fields['id'] = $result['_embedded']['tasks'][0]['id'];
+	    $item->tasks->fields['id'] = $result['_embedded']['tasks'][0]['id'];
+	    Aprint_r($item->tasks);
+	}
+
+	// Прикрепление примечания к экземпляру сущност
+	public function attachNote($item, string $note_type, array $params)
+	{
+		if (!$this->client->IsActual()) $this->client->updateToken();
+		if (empty($item)) throw new Exception('Передан не существующий элемент.');
+		$dataNote = [
+	        "entity_id" => $item->getID(),
+	        "note_type" => $note_type,
+	        "params" => $params
+		];
+		$note = new Notes();
+		$note->setFields($dataNote);
+		$data['add'] = $note->fields;
+		$item->notes = $note;
+    	$link='https://'.$this->client->getDomain().'.amocrm.ru/api/v4/leads/notes';
+	    $result = Curl::curl($link, $this->client->getAccessToken(), "POST", $data);
+	    $note->fields['id'] = $result['_embedded']['notes'][0]['id'];
 	}
 }

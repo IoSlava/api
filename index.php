@@ -42,10 +42,22 @@ include ROOT.'/Library/AmoCrm/load.php';
 		}	
 		$client->showToken();
 
-		//$lead = $client->lead()->getById(28733589);//28733589
+		$lead = $client->lead()->getById(28751995);//28733589
+		//$lead->updateCustomFieldById(820659, 'Вот так', 0);
+		//$client->lead()->update($lead);
 		//$lead->fields['price'] = 1500; 
 		//$client->lead()->update($lead);
-		$client->lead()->create('Новая сделка');
+		//$client->lead()->create('Новая сделка');
+		$client->lead()->attachTask($lead,'Задача', 300, 2);
+		$client->lead()->attachTask($lead,'Task', 300, 2);
+		$task = $lead->tasks->filter(['text' => 'Task' ]);
+		echo "===========<br>";
+		Aprint_r($task);
+		// $client->lead()->attachNote($lead,'Задача',300,2);
+		$params = [
+			'text' => 'Примета'
+		];
+		//$client->lead()->attachNote($lead,'common',$params);
 		//Aprint_r($lead);
 		// Тесты на нахождение сущностей по id
 		function Test1($client,$n,$id)

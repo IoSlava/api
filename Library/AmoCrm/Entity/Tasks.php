@@ -1,5 +1,5 @@
 <?php
-namespace Api\Library\AmoCrm\Services;
+namespace Api\Library\AmoCrm\Entity;
 
 class Tasks 
 {
@@ -12,7 +12,12 @@ class Tasks
         "complete_till" => ""
 	];
 
-	public function __construct($array)
+	public function __construct()
+	{
+		
+	}
+
+	public function setFields($array)
 	{
 		$this->fields = $array;
 	}

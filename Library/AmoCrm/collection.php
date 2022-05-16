@@ -2,7 +2,7 @@
 namespace Api\Library\AmoCrm;
 use Exception;
 
-class Collection extends Curl
+class Collection
 {
 	protected $items = [];
 	protected $access_token;
@@ -16,7 +16,7 @@ class Collection extends Curl
 		$this->domain = $domain;
 		$this->type = $type;
 		$link="https://".$this->domain.".amocrm.ru/api/v4/".$type.'?limit=250';
-		$Response= $this->curl($link, $this->access_token);
+		$Response= Curl::curl($link, $this->access_token);
 		// Формирование имени необходимго класса для данной сущности
 		$className = ucfirst($type);
 		$className ='Api\Library\AmoCrm\\'.$className;
@@ -51,7 +51,7 @@ class Collection extends Curl
 		// Добавление изменений для кастомных полей
 		$data['update']['custom_fields_values'] = $item->getCustom();
 		$link='https://'.$this->domain.'.amocrm.ru/api/v4/'.$this->type;
-		$Response=$this->curl($link, $this->access_token, "PATCH", $data);
+		$Response=Curl::curl($link, $this->access_token, "PATCH", $data);
 		return true;
 
 	}
@@ -66,7 +66,7 @@ class Collection extends Curl
 		$item->fields['name'] = $name;
 		$data['add'] = $item->fields;
     	$link='https://'.$this->domain.'.amocrm.ru/api/v4/'.$this->type;
-	    $result = $this->curl($link, $this->access_token, "POST", $data);
+	    $result = Curl::curl($link, $this->access_token, "POST", $data);
 	    $item->fields['id'] = $result['_embedded'][$this->type][0]['id'];
 	    // Довабление нового объекта в массив 
 	    $this->items = array_merge($this->items, [$item]);
@@ -87,7 +87,7 @@ class Collection extends Curl
 		$data['add'] = $task->fields;
 		$item->task = $task;
     	$link='https://'.$this->domain.'.amocrm.ru/api/v4/'.'tasks';
-	    $result = $this->curl($link,b$this->access_token, "POST", $data);
+	    $result = Curl::curl($link,$this->access_token, "POST", $data);
 	    // Сохранения id, только что созданной задачи в массив объекта экземпляра сущности
 	    $item->task->fields['id'] = $result['_embedded']['tasks'][0]['id'];
 	}
@@ -104,7 +104,7 @@ class Collection extends Curl
 		$data['add'] = $note->fields;
 		$item->note = $note;
     	$link='https://'.$this->domain.'.amocrm.ru/api/v4/'.$this->type.'/notes';
-	    $result = $this->curl($link, $this->access_token, "POST", $data);
+	    $result = Curl::curl($link, $this->access_token, "POST", $data);
 	    $note->fields['id'] = $result['_embedded']['notes'][0]['id'];
 	}
 }

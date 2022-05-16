@@ -1,7 +1,8 @@
 <?php 
 namespace Api\Library\AmoCrm;
+use Api\Library\AmoCrm\Services\Leads;
 
-class AmoApi  extends Curl
+class AmoApi 
 {
 	protected $token;
 	protected $absolutePathTokenFile;
@@ -10,26 +11,29 @@ class AmoApi  extends Curl
 	public function __construct($dataAmo)
 	{
 		$this->dataAmo = $dataAmo;
-		$this->createFolder();
-		$this->createFile();
-	}
 
-	public function createFolder()
-	{
 		$domain = $this->getDomain();
 		$nameFolder = ROOT."/Token/".$domain;
-		mkdir($nameFolder);
 		$this->absolutePathTokenFile = $nameFolder."/token.json";
+
+		if (!file_exists($this->absolutePathTokenFile)) {
+			$this->createFolder();
+			$this->createFile();
+		}
+	}
+ 
+	public function createFolder()
+	{
+		@mkdir($nameFolder, 0777, true);
 	}
 
 	public function createFile()
 	{
 		// Открываем файл в нужном нам режиме. Нам же, нужно его создать и что то записать.
-		$fp = fopen("token.json", "w");
+		$fp = fopen($this->absolutePathTokenFile, "w");
 		fwrite($fp, "");
 		fclose($fp);
 	}
-
 	// Сохранение токена файл, если последний существует
 	public function saveToken()
 	{
@@ -45,12 +49,18 @@ class AmoApi  extends Curl
 			$token = file_get_contents($this->absolutePathTokenFile);
 			if ($token) {
 				$this->token = (Array)json_decode($token);
-				$this->loadDataAmo();
+				//$this->loadDataAmo();
 				return true;
 			}
 		}
 		return false;
 	}
+
+	public function showToken()
+	{
+		Aprint_r($this->token);
+	}
+
     // Первичаня авторизация
 	public function firstAuth($code)
 	{
@@ -64,14 +74,14 @@ class AmoApi  extends Curl
 			'grant_type' => 'authorization_code',
 			'code' => $code
 		];
-		$response = $this->curl($link,null,"POST",$this->dataAmo['login']);
+		$response = Curl::curl($link,null,"POST",$login);
 		$access['access_token'] = $response['access_token']; 
 		$access['refresh_token'] = $response['refresh_token']; 
 		$access['token_type'] = $response['token_type']; 
 		$access['expires_in'] = $response['expires_in']; 
 		$access["endTokenTime"] = time() + $response["expires_in"];
 		$this->token=$access;
-		$this->loadDataAmo();
+		// $this->loadDataAmo();
 		$this->saveToken();
 		return true;
 	}
@@ -101,13 +111,13 @@ class AmoApi  extends Curl
 	{
 		$link = 'https://' . $this->dataAmo['domain'] . '.amocrm.ru/oauth2/access_token'; //Формируем URL для запроса
 		$data = [
-			'client_id' => $this->dataAmo['login']['client_id'],
-			'client_secret' =>$this->dataAmo['login']['client_secret'],
+			'client_id' => $this->dataAmo['client_id'],
+			'client_secret' =>$this->dataAmo['client_secret'],
 			'grant_type' => 'refresh_token',
 			'refresh_token' => $this->getRefreshToken(),
-			'redirect_uri' => $this->dataAmo['login']['redirect_uri'],
+			'redirect_uri' => $this->dataAmo['redirect_uri'],
 		];
-		$response = $this->curl($link,null,"POST",$data);
+		$response = Curl::curl($link,null,"POST",$data);
 		if ($response) {
 			// Установление времени окончания жизни токена
 			$response["endTokenTime"] = time() + $response["expires_in"];
@@ -118,6 +128,45 @@ class AmoApi  extends Curl
 		else {
 			return false;
 		}
+	}
+
+	protected $leads;
+	protected $companies;
+	protected $contacts;
+	// Вовзрат объекта коллекции сделок
+	public function leads()
+	{
+		return $this->middleware($this->leads);
+	}
+	// Вовзрат объекта коллекции компаний
+	public function companies()
+	{
+		return $this->middleware($this->companies);
+	}
+	// Вовзрат объекта коллекции контактов
+	public function contacts()
+	{
+		return $this->middleware($this->contacts);
+	}
+	// Проверка актуальности токена, при выполнении последнего условия, возврат переданного объекта
+	public function middleware($object)
+	{
+		if (!$this->IsActual()) $this->updateToken();
+		return $object;
+	}
+	// Проверка актуальности токена, при выполнении последнего условия, создания объектов коллекций
+	// public function loadDataAmo()
+	// {
+	// 	if (!$this->IsActual()) $this->updateToken();
+	// 	$this->leads = new Collection($this->getDomain(), $this->getAccessToken(), "leads");
+	// 	$this->companies = new Collection($this->getDomain(), $this->getAccessToken(), "companies");
+	// 	$this->contacts = new Collection($this->getDomain(), $this->getAccessToken(), "contacts");
+	// }
+
+	public function lead()
+	{
+		$lead = new Leads($this);
+		return $lead;
 	}
 }
 

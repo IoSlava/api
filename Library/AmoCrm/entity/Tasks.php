@@ -1,7 +1,7 @@
 <?php
-namespace Api\Library\AmoCrm;
+namespace Api\Library\AmoCrm\Services;
 
-class Task 
+class Tasks 
 {
 	public $fields = [
 		"id" => 0,

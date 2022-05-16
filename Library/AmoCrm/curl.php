@@ -1,10 +1,11 @@
 <?php 
 namespace Api\Library\AmoCrm;
+use Api\Library\AmoCrm\Error\Error;
 
 class Curl
 {
 	// Отправка запроса к AmoCrm
-	public function curl($link,$access_token,$method='get',$data=null)
+	public static function curl($link,$access_token,$method='get',$data=null)
 	{
 		$headers = [
 			"Accept: application/json",

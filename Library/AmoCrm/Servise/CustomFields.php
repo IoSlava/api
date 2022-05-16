@@ -1,7 +1,7 @@
 <?php
-namespace Api\Library\AmoCrm;
+namespace Api\Library\AmoCrm\Services;
 
-class Custom 
+class CustomFields 
 {
 	public $fields;
 	// Заполнение кастомных полей

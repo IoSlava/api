@@ -1,5 +1,5 @@
 <?php
-use Api\Library\AmoCrm\Api as Client;
+use Api\Library\AmoCrm\AmoApi as Client;
 define('ROOT', __DIR__);
 // Функция для 'красивого' вывода массиово и объектов
 function Aprint_r($array)
@@ -30,14 +30,23 @@ include ROOT.'/Library/AmoCrm/load.php';
 	<?php
 		$timeLoad = time();
 		// Создание объекта клиента и передача ему в конструктор данных для доступа к AmoCrm
-		$client = new Client(getConfig());
+		if (getConfig('dlatestov')) $client = new Client(getConfig('dlatestov'));
+		else exit('Что-то пошло не так');
 		// Проверка: был ли загружен токен из файла
-		if($client->loadToken()){ }
+		if($client->loadToken()){ echo "Токен есть!";}
 		// Иначе: происходит первичная авторизация и сохранение токена в файл	
 		else {
-			$client->firstAuth();
+			$code = 'def50200c300d93c9f22e9788220cf24b27b709503fbdacbe2c04aafeab553bde2b0343d303c110e6fcb761fde4dbc4c5027577e6990fb46335950c5c6ce0f98b27e05686d92c3cff4c8dceaccb7c02df02cd8b04f7d861f2d8e6447a65d75d25b06e598f26e5dbe133acba6c3ec2030946a2ce86db8938839453935db02453c772048f43cd87fd5ca88d3d4b4ae7e4e18123ee347be08764869a2e220bdf31fa02d9de28edc400acb46a6db42f80a7e5682d1e2059c68fe39bcd8f1e9d4b9f37b38a132e44f5f5926f469d4903ea33305670a11528c9475c046070c7c3c450fda7d06ba0f654a3fbcc9f529ce6b1dab69990210b97a8ed77b751eced97ca1da1d36d2f6aa8245cff1d0693476391fc3a4b270e02c3a169027969aa91267eae12c85c7ca15147b715246127f0d979b77bbdb53cbf77713387d7d6e968d5c7a57e330bcf0a22e3615418b1326069c0aabd99b5857d423be84e9b6411cf8138358d91725a5692c39db30f1579b9130087e611877fedea58c0f5bfac38c93a27c70318c31c0bf9fffdc1e1f76ffece67e3091a88d264c4e68b56cd611ebcde4bed717248243d96a98720abb7ae0e1746157afdefa9099a91b90f33492';
+			$client->firstAuth($code);
 			$client->saveToken();
 		}	
+		$client->showToken();
+
+		//$lead = $client->lead()->getById(28733589);//28733589
+		//$lead->fields['price'] = 1500; 
+		//$client->lead()->update($lead);
+		$client->lead()->create('Новая сделка');
+		//Aprint_r($lead);
 		// Тесты на нахождение сущностей по id
 		function Test1($client,$n,$id)
 		{

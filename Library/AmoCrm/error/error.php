@@ -1,5 +1,5 @@
 <?php
-namespace Api\Library\AmoCrm;
+namespace Api\Library\AmoCrm\Error;
 use Exception;
 
 class Error 

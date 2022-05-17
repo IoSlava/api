@@ -1,14 +1,14 @@
 <?php
-namespace Api\Library\AmoCrm;
+namespace Api\Library\AmoCrm\Entity;
 
-class Contacts extends Item
+class Contact extends MainEntites
 {
 	public $fields =  [
 	  "id" => 0,
 	  "name" => "name",
 	  "first_name" => "",
 	  "last_name" => "",
-	  "responsible_user_id" => 449371,
+	  "responsible_user_id" => 0,
 	  "group_id" => 0
 	];
 }

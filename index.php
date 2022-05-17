@@ -15,7 +15,7 @@ function Aecho($value)
 }
 
 include ROOT.'/config/amoCrm.php';
-include ROOT.'/Library/AmoCrm/load.php';
+include ROOT.'/player128/amoapi/load.php';
 ?>
 <!DOCTYPE html>
 <html>

@@ -1,5 +1,5 @@
 <?php 
-namespace Api\Library\AmoCrm;
+namespace Api\Library\AmoCrm\Services;
 use Api\Library\AmoCrm\Error\Error;
 
 class Curl

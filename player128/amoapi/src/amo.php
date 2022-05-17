@@ -1,6 +1,7 @@
 <?php 
 namespace Api\Library\AmoCrm;
 use Api\Library\AmoCrm\Services\Leads;
+use Api\Library\AmoCrm\Services\Curl;
 
 class AmoApi 
 {
@@ -13,7 +14,7 @@ class AmoApi
 		$this->dataAmo = $dataAmo;
 
 		$domain = $this->getDomain();
-		$nameFolder = ROOT."/Token/".$domain;
+		$nameFolder = __DIR__."/Token/".$domain;
 		$this->absolutePathTokenFile = $nameFolder."/token.json";
 
 		if (!file_exists($this->absolutePathTokenFile)) {
@@ -29,7 +30,6 @@ class AmoApi
 
 	public function createFile()
 	{
-		// Открываем файл в нужном нам режиме. Нам же, нужно его создать и что то записать.
 		$fp = fopen($this->absolutePathTokenFile, "w");
 		fwrite($fp, "");
 		fclose($fp);
@@ -130,40 +130,7 @@ class AmoApi
 		}
 	}
 
-	protected $leads;
-	protected $companies;
-	protected $contacts;
-	// Вовзрат объекта коллекции сделок
 	public function leads()
-	{
-		return $this->middleware($this->leads);
-	}
-	// Вовзрат объекта коллекции компаний
-	public function companies()
-	{
-		return $this->middleware($this->companies);
-	}
-	// Вовзрат объекта коллекции контактов
-	public function contacts()
-	{
-		return $this->middleware($this->contacts);
-	}
-	// Проверка актуальности токена, при выполнении последнего условия, возврат переданного объекта
-	public function middleware($object)
-	{
-		if (!$this->IsActual()) $this->updateToken();
-		return $object;
-	}
-	// Проверка актуальности токена, при выполнении последнего условия, создания объектов коллекций
-	// public function loadDataAmo()
-	// {
-	// 	if (!$this->IsActual()) $this->updateToken();
-	// 	$this->leads = new Collection($this->getDomain(), $this->getAccessToken(), "leads");
-	// 	$this->companies = new Collection($this->getDomain(), $this->getAccessToken(), "companies");
-	// 	$this->contacts = new Collection($this->getDomain(), $this->getAccessToken(), "contacts");
-	// }
-
-	public function lead()
 	{
 		$lead = new Leads($this);
 		return $lead;

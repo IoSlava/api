@@ -1,13 +1,14 @@
 <?php
 namespace Api\Library\AmoCrm\Services;
-use Api\Library\AmoCrm\Curl;
-use Api\Library\AmoCrm\Entity\Leads as Entity;
-use Api\Library\AmoCrm\Entity\Tasks;
-use Api\Library\AmoCrm\Entity\Notes;
 
-class Leads 
+use Api\Library\AmoCrm\Entity\Lead as Entity;
+use Api\Library\AmoCrm\Entity\Task;
+use Api\Library\AmoCrm\Entity\Note;
+
+class Requests 
 {
 	private $client;
+	private $entity;
 
 	public function __construct($client)
 	{
@@ -20,7 +21,7 @@ class Leads
 		if (empty($id)) throw new Exception('Передан пустой параметр.');
 		if (gettype($id) != 'integer') throw new Exception('Передан тип '.gettype($id).' вместо integer.');
 		if ($id <= 0) throw new Exception('Передан некорректный ID.');
-		$link='https://'.$this->client->getDomain().'.amocrm.ru/api/v4/leads/'.$id;
+		$link='https://'.$this->client->getDomain().'.amocrm.ru/api/v4/'.$this->entity.'/'.$id;
 		$response = Curl::curl($link, $this->client->getAccessToken(), "GET");
 		if (!isset($response)) {
 			echo "Сделка не найдена!";
@@ -44,7 +45,7 @@ class Leads
 		}
 		// Добавление изменений для кастомных полей
 		$data['update']['custom_fields_values'] = $item->getCustom();
-		$link='https://'.$this->client->getDomain().'.amocrm.ru/api/v4/leads';
+		$link='https://'.$this->client->getDomain().'.amocrm.ru/api/v4/'.$this->entity.'leads';
 		Aprint_r($data);
 		$Response=Curl::curl($link, $this->client->getAccessToken(), "PATCH", $data);
 		Aprint_r($Response);
@@ -65,9 +66,9 @@ class Leads
 		unset($data['add']['status_id']);
 		unset($data['add']['pipeline_id']);
 		Aprint_r($data);
-    	$link='https://'.$this->client->getDomain().'.amocrm.ru/api/v4/leads';
+    	$link='https://'.$this->client->getDomain().'.amocrm.ru/api/v4/'.$this->entity;
 	    $result = Curl::curl($link, $this->client->getAccessToken(), "POST", $data);
-	    $item->fields['id'] = $result['_embedded']['leads'][0]['id'];
+	    $item->fields['id'] = $result['_embedded'][$this->entity][0]['id'];
 	    Aprint_r($item);
 	    return $item;
 	}
@@ -81,7 +82,7 @@ class Leads
 			'text' => $text,
 			'complete_till' => time() + $duration,
 			'entity_id' => $item->getID(),
-			'entity_type' =>'leads',
+			'entity_type' => $this->entity,
 			'task_type' => $task_type 
 		];
 		$task = new Tasks();
@@ -109,7 +110,7 @@ class Leads
 		$note->setFields($dataNote);
 		$data['add'] = $note->fields;
 		$item->notes = $note;
-    	$link='https://'.$this->client->getDomain().'.amocrm.ru/api/v4/leads/notes';
+    	$link='https://'.$this->client->getDomain().'.amocrm.ru/api/v4/'.$this->entity.'/notes';
 	    $result = Curl::curl($link, $this->client->getAccessToken(), "POST", $data);
 	    $note->fields['id'] = $result['_embedded']['notes'][0]['id'];
 	}

@@ -94,7 +94,7 @@ class BaseRequests
     	$link='https://'.$this->client->getDomain().'.amocrm.ru/api/v4/'.'tasks';
 	    $result = Curl::curl($link,$this->client->getAccessToken(), "POST", $data);
 	    // Сохранения id, только что созданной задачи в массив объекта экземпляра сущности
-	    $task->fields['id'] = $result['_embedded']['tasks'][0]['id'];
+	    $tasks->fields['id'] = $result['_embedded']['tasks'][0]['id'];
 	    $item->tasks->push($task);
 	    Aprint_r($item->tasks);
 	}

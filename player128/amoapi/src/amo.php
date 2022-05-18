@@ -12,7 +12,7 @@ class AmoApi
 	protected $absolutePathTokenFile;
 	protected $dataAmo;
 	// Получение данных для подключения к AmoCrm из конфига
-	public function __construct($dataAmo)
+	public function __construct($dataAmo, $code)
 	{
 		$this->dataAmo = $dataAmo;
 
@@ -20,10 +20,13 @@ class AmoApi
 		$nameFolder = __DIR__."/Opacity/Tokens/".$domain;
 		$this->absolutePathTokenFile = $nameFolder."/token.json";
 
+
 		if (!file_exists($this->absolutePathTokenFile)) {
 			$this->createFolder();
 			$this->createFile();
 		}
+
+		if (!$this->loadToken()) firstAuth($code);
 	}
  
 	public function createFolder()

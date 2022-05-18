@@ -3,7 +3,7 @@ namespace Api\Library\AmoCrm\Collection;
 
 class BaseCollection
 {
-	private $items = [];
+	protected $items = [];
 
 	public function __construct()
 	{
@@ -42,5 +42,7 @@ class BaseCollection
 
 		return false;
 	}
+
+
 
 }

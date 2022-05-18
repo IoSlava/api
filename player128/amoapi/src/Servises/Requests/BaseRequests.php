@@ -1,6 +1,7 @@
 <?php
 namespace Api\Library\AmoCrm\Services\Requests;
 
+use function Api\Library\AmoCrm\Support\Aprint_r;
 use Api\Library\AmoCrm\Support\Curl;
 use Api\Library\AmoCrm\Entities\Task;
 use Api\Library\AmoCrm\Entities\Note;
@@ -12,6 +13,7 @@ class BaseRequests
 
 	public function __construct($client)
 	{
+		$this->client = $client;
 	}
 
 	public function createEntity($array)
@@ -89,11 +91,11 @@ class BaseRequests
 		$task = new Task();
 		$task->setFields($dataTask);
 		$data['add'] = $task->fields;
-		$item->tasks->push($task);
     	$link='https://'.$this->client->getDomain().'.amocrm.ru/api/v4/'.'tasks';
 	    $result = Curl::curl($link,$this->client->getAccessToken(), "POST", $data);
 	    // Сохранения id, только что созданной задачи в массив объекта экземпляра сущности
-	    $item->tasks->fields['id'] = $result['_embedded']['tasks'][0]['id'];
+	    $task->fields['id'] = $result['_embedded']['tasks'][0]['id'];
+	    $item->tasks->push($task);
 	    Aprint_r($item->tasks);
 	}
 
@@ -107,7 +109,7 @@ class BaseRequests
 	        "note_type" => $note_type,
 	        "params" => $params
 		];
-		$note = new Note();
+		$note = new Notes();
 		$note->setFields($dataNote);
 		$data['add'] = $note->fields;
 		$item->notes = $note;

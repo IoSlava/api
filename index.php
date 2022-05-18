@@ -1,5 +1,6 @@
 <?php
 use Api\Library\AmoCrm\AmoApi as Client;
+use function Api\Library\AmoCrm\Support\Aprint_r;
 define('ROOT', __DIR__);
 // Функция для 'красивого' вывода массиово и объектов
 include ROOT.'/config/amoCrm.php';
@@ -30,7 +31,7 @@ include ROOT.'/player128/amoapi/src/load.php';
 		}	
 		$client->showToken();
 
-		$lead = $client->leads()->getById(28751995);//28733589
+		$lead = $client->leads()->getById(28892901);//28892901
 		//$lead->updateCustomFieldById(820659, 'Вот так', 0);
 		//$client->lead()->update($lead);
 		//$lead->fields['price'] = 1500; 

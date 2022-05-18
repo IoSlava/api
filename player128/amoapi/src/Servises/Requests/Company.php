@@ -19,7 +19,7 @@ class Companies extends BaseRequests
 	public function createEntity($array)
 	{
 		$company = new Company();
-		if (isset($array)) $company->setFields($response);
+		if (isset($array)) $company->setFields($array);
 		return $company;
 	}
 }

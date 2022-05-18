@@ -1,5 +1,5 @@
 <?php
-namespace Api\Library\AmoCrm\Entity;
+namespace Api\Library\AmoCrm\Entities;
 
 class Tasks 
 {

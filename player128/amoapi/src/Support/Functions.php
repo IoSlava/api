@@ -1,5 +1,5 @@
 <?php 
-namespace Api\Library\AmoCrm\Services;
+namespace Api\Library\AmoCrm\Support;
 
 // Функция для 'красивого' вывода массиово и объектов
 function Aprint_r($array)

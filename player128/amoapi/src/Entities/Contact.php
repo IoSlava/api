@@ -1,7 +1,7 @@
 <?php
-namespace Api\Library\AmoCrm\Entity;
+namespace Api\Library\AmoCrm\Entities;
 
-class Contact extends MainEntites
+class Contact extends Entity
 {
 	public $fields =  [
 	  "id" => 0,

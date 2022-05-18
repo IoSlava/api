@@ -2,20 +2,8 @@
 use Api\Library\AmoCrm\AmoApi as Client;
 define('ROOT', __DIR__);
 // Функция для 'красивого' вывода массиово и объектов
-function Aprint_r($array)
-{
-	echo "<pre>";
-	print_r($array);
-	echo "</pre>";
-}
-// Вывод значения с переносом до и после строки
-function Aecho($value)
-{
-	echo "<br>".$value."<br>";
-}
-
 include ROOT.'/config/amoCrm.php';
-include ROOT.'/player128/amoapi/load.php';
+include ROOT.'/player128/amoapi/src/load.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -42,14 +30,14 @@ include ROOT.'/player128/amoapi/load.php';
 		}	
 		$client->showToken();
 
-		$lead = $client->lead()->getById(28751995);//28733589
+		$lead = $client->leads()->getById(28751995);//28733589
 		//$lead->updateCustomFieldById(820659, 'Вот так', 0);
 		//$client->lead()->update($lead);
 		//$lead->fields['price'] = 1500; 
 		//$client->lead()->update($lead);
 		//$client->lead()->create('Новая сделка');
-		$client->lead()->attachTask($lead,'Задача', 300, 2);
-		$client->lead()->attachTask($lead,'Task', 300, 2);
+		$client->leads()->attachTask($lead,'Задача', 300, 2);
+		$client->leads()->attachTask($lead,'Task', 300, 2);
 		$task = $lead->tasks->filter(['text' => 'Task' ]);
 		echo "===========<br>";
 		Aprint_r($task);

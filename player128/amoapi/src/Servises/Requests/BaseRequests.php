@@ -1,18 +1,22 @@
 <?php
-namespace Api\Library\AmoCrm\Services;
+namespace Api\Library\AmoCrm\Services\Requests;
 
-use Api\Library\AmoCrm\Entity\Lead as Entity;
-use Api\Library\AmoCrm\Entity\Task;
-use Api\Library\AmoCrm\Entity\Note;
+use Api\Library\AmoCrm\Support\Curl;
+use Api\Library\AmoCrm\Entities\Task;
+use Api\Library\AmoCrm\Entities\Note;
 
-class Requests 
+class BaseRequests 
 {
-	private $client;
-	private $entity;
+	protected $client;
+	protected $entity;
 
 	public function __construct($client)
 	{
-		$this->client = $client;
+	}
+
+	public function createEntity($array)
+	{
+
 	}
 
 	public function getById($id)
@@ -27,10 +31,7 @@ class Requests
 			echo "Сделка не найдена!";
 			return false;
 		} 
-		//Aprint_r($response);
-		$lead = new Entity();
-		$lead->setFields($response);
-		return $lead;
+		return $this->createEntity($response);
 	}
 
 	public function update($item)
@@ -41,7 +42,7 @@ class Requests
 		// Построение массива, для запроса  
 		foreach ($item->fields as $key => $value) {
 			if ($key == '_links' || $key == '_embedded') continue;
-			 $data['update'] = array_merge($data['update'], [$key=> $value]);
+			 $data['update'] = array_merge($data['update'], [$key => $value]);
 		}
 		// Добавление изменений для кастомных полей
 		$data['update']['custom_fields_values'] = $item->getCustom();
@@ -60,7 +61,7 @@ class Requests
 		// Генерация исключение, если передан не верный тип
 		if (gettype($name) != 'string') throw new Exception('Передан тип '.gettype($name).' вместо string.');
 		// Создание объекта для экземпляра сущности 
-		$item = new Entity();
+		$item = $this->createEntity();
 		$item->fields['name'] = $name;
 		$data['add'] = $item->fields;
 		unset($data['add']['status_id']);
@@ -85,7 +86,7 @@ class Requests
 			'entity_type' => $this->entity,
 			'task_type' => $task_type 
 		];
-		$task = new Tasks();
+		$task = new Task();
 		$task->setFields($dataTask);
 		$data['add'] = $task->fields;
 		$item->tasks->push($task);
@@ -106,7 +107,7 @@ class Requests
 	        "note_type" => $note_type,
 	        "params" => $params
 		];
-		$note = new Notes();
+		$note = new Note();
 		$note->setFields($dataNote);
 		$data['add'] = $note->fields;
 		$item->notes = $note;

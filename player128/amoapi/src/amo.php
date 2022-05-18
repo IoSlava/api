@@ -1,7 +1,10 @@
 <?php 
 namespace Api\Library\AmoCrm;
-use Api\Library\AmoCrm\Services\Leads;
-use Api\Library\AmoCrm\Services\Curl;
+use Api\Library\AmoCrm\Support\Curl;
+use Api\Library\AmoCrm\Services\Requests\Lead;
+use Api\Library\AmoCrm\Services\Requests\Contact;
+use Api\Library\AmoCrm\Services\Requests\Company;
+use function Api\Library\AmoCrm\Support\Aprint_r;
 
 class AmoApi 
 {
@@ -14,7 +17,7 @@ class AmoApi
 		$this->dataAmo = $dataAmo;
 
 		$domain = $this->getDomain();
-		$nameFolder = __DIR__."/Token/".$domain;
+		$nameFolder = __DIR__."/Opacity/Tokens/".$domain;
 		$this->absolutePathTokenFile = $nameFolder."/token.json";
 
 		if (!file_exists($this->absolutePathTokenFile)) {
@@ -124,15 +127,14 @@ class AmoApi
 			$this->token=$response;
 			$this->saveToken();
 			return $this->token['access_token'];
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
 
 	public function leads()
 	{
-		$lead = new Leads($this);
+		$lead = new Lead($this);
 		return $lead;
 	}
 }

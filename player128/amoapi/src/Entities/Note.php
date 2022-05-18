@@ -1,7 +1,7 @@
 <?php
-namespace Api\Library\AmoCrm\Entity;
+namespace Api\Library\AmoCrm\Entities;
 
-class Notes  
+class Note
 {
 	public $fields = [
         "id" => 0,

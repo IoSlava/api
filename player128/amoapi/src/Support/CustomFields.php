@@ -1,5 +1,5 @@
 <?php
-namespace Api\Library\AmoCrm\Services;
+namespace Api\Library\AmoCrm\Support;
 
 class CustomFields 
 {

@@ -1,9 +1,9 @@
 <?php 
-namespace Api\Library\AmoCrm\Entity;
+namespace Api\Library\AmoCrm\Entities;
 use  Api\Library\AmoCrm\Services\CustomFields;
-use Api\Library\AmoCrm\Collection\BaseCollection;
+use  Api\Library\AmoCrm\Collection\BaseCollection;
 
-class Lead extends MainEntites
+class Lead extends Entity
 {
 	public $fields =  [
 		"id"   => "0",

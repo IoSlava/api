@@ -1,6 +1,9 @@
 <?php
 namespace Api\Library\AmoCrm\Error;
+
 use Exception;
+use function Api\Library\AmoCrm\Support\Aecho;
+use function Api\Library\AmoCrm\Support\Aprint_r;
 
 class Error 
 {

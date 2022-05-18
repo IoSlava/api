@@ -1,32 +1,27 @@
-<?php
+<?php 
+namespace Api\Library\AmoCrm\Entities;
+use  Api\Library\AmoCrm\Support\CustomFields;
+use Api\Library\AmoCrm\Collection\BaseCollection;
 
-namespace Api\Library\AmoCrm;
-
-
-class Item extends Curl
+class Entity
 {
 	public $fields;
 	public $custom_fields = [];
-	protected $id;
-	public $name;
-	// Получение кастомных полей
-	public function getField()
+	public $tasks;
+	public $notes;
+
+	public function __construct()
 	{
-		return $this->$custom_fields;
+		$this->tasks = new baseCollection();
 	}
-	// Получение наименования экземпляра сущности
-	public function getName()
-	{
-		return $this->name;
-	}
-	// Заполнение объекта данными экземпляра сущности
-	public function __construct($array, $type,$domain= null, $access_token = null)
+
+	public function setFields($array)
 	{
 		if (!is_array($array)) return false;
-		$this->name = $type;
+
 		if (!empty($array['custom_fields_values'])) {
 			foreach ($array['custom_fields_values'] as $item) {
-				$this->custom_fields = array_merge($this->custom_fields, [new Custom($item)]);
+				$this->custom_fields = array_merge($this->custom_fields, [new CustomFields($item)]);
 			}
 		} 
 		foreach ($this->fields as $key => $value) {
@@ -34,11 +29,21 @@ class Item extends Curl
 		}
 		return $this;
 	}
-	// Получение id встроенного поля
-	public function getId()
+
+	public function getID()
 	{
 		return $this->fields['id'];
 	}
+
+	public function getCustom()
+	{
+		$result = [];
+		foreach ($this->custom_fields as $field) {
+			$result = array_merge($result, [$field->getFields()]);
+		}
+		return $result;
+	}
+
 	// Изменения кастомного поля по id
 	public function updateCustomFieldById($id, $value, $index)
 	{
@@ -52,14 +57,5 @@ class Item extends Curl
 		for ($i = 0; $i < sizeof($this->custom_fields); $i++) {
 			if ($this->custom_fields[$i]->getName() == $name)$this->custom_fields[$i]->setValue($value, $index);
 		}
-	}
-	// Получение массива кастомных полей
-	public function getCustom()
-	{
-		$result = [];
-		foreach ($this->custom_fields as $field) {
-			$result = array_merge($result, [$field->getFields()]);
-		}
-		return $result;
 	}
 }

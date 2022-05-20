@@ -1,11 +1,11 @@
 <?php
-namespace Api\Library\AmoCrm\Services\Requests;
+namespace player128\AmoApi\Services\Requests;
 
-use Api\Library\AmoCrm\Entities\Contact;
-use Api\Library\AmoCrm\Entities\Task;
-use Api\Library\AmoCrm\Entities\Note;
+use player128\AmoApi\Entities\Contact as EContact;
+use player128\AmoApi\Entities\Task;
+use player128\AmoApim\Entities\Note;
 
-class Contacts extends BaseRequests
+class Contact extends BaseRequests
 {
 	protected $client;
 	protected $entity;
@@ -16,10 +16,15 @@ class Contacts extends BaseRequests
 		$this->entity = 'contacts';
 	}
 
-	public function createEntity($array)
+	public function createEntity($array = null)
 	{
-		$contact = new Contact();
+		$contact = new EContact();
 		if (isset($array)) $contact->setFields($array);
 		return $contact;
+	}
+
+	public function msgNotresult()
+	{
+		return 'Контакт не найден.';
 	}
 }

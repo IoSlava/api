@@ -1,7 +1,7 @@
 <?php 
-namespace Api\Library\AmoCrm\Entities;
-use  Api\Library\AmoCrm\Support\CustomFields;
-use Api\Library\AmoCrm\Collection\BaseCollection;
+namespace player128\AmoApi\Entities;
+use  player128\AmoApi\Support\CustomFields;
+use  player128\AmoApi\Collection\BaseCollection;
 
 class Entity
 {
@@ -13,6 +13,7 @@ class Entity
 	public function __construct()
 	{
 		$this->tasks = new baseCollection();
+		$this->notes = new baseCollection();
 	}
 
 	public function setFields($array)

@@ -1,5 +1,5 @@
 <?php
-namespace Api\Library\AmoCrm\Support;
+namespace player128\AmoApi\Support;
 
 class CustomFields 
 {

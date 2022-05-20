@@ -1,10 +1,10 @@
 <?php
-namespace Api\Library\AmoCrm\Services\Requests;
+namespace player128\AmoApi\Services\Requests;
 
-use function Api\Library\AmoCrm\Support\Aprint_r;
-use Api\Library\AmoCrm\Support\Curl;
-use Api\Library\AmoCrm\Entities\Task;
-use Api\Library\AmoCrm\Entities\Note;
+use function player128\AmoApi\Support\Aprint_r;
+use player128\AmoApi\Support\Curl;
+use player128\AmoApi\Entities\Task;
+use player128\AmoApi\Entities\Note;
 
 class BaseRequests 
 {
@@ -21,6 +21,11 @@ class BaseRequests
 
 	}
 
+	public function msgNotresult()
+	{
+
+	}
+
 	public function getById($id)
 	{
 		if (!$this->client->IsActual()) $this->client->updateToken();
@@ -30,7 +35,7 @@ class BaseRequests
 		$link='https://'.$this->client->getDomain().'.amocrm.ru/api/v4/'.$this->entity.'/'.$id;
 		$response = Curl::curl($link, $this->client->getAccessToken(), "GET");
 		if (!isset($response)) {
-			echo "Сделка не найдена!";
+			echo $this->msgNotresult();
 			return false;
 		} 
 		return $this->createEntity($response);
@@ -48,7 +53,7 @@ class BaseRequests
 		}
 		// Добавление изменений для кастомных полей
 		$data['update']['custom_fields_values'] = $item->getCustom();
-		$link='https://'.$this->client->getDomain().'.amocrm.ru/api/v4/'.$this->entity.'leads';
+		$link='https://'.$this->client->getDomain().'.amocrm.ru/api/v4/'.$this->entity;
 		Aprint_r($data);
 		$Response=Curl::curl($link, $this->client->getAccessToken(), "PATCH", $data);
 		Aprint_r($Response);
@@ -68,11 +73,11 @@ class BaseRequests
 		$data['add'] = $item->fields;
 		unset($data['add']['status_id']);
 		unset($data['add']['pipeline_id']);
-		Aprint_r($data);
     	$link='https://'.$this->client->getDomain().'.amocrm.ru/api/v4/'.$this->entity;
 	    $result = Curl::curl($link, $this->client->getAccessToken(), "POST", $data);
 	    $item->fields['id'] = $result['_embedded'][$this->entity][0]['id'];
-	    Aprint_r($item);
+	    Aprint_r($result);
+
 	    return $item;
 	}
 
@@ -94,9 +99,9 @@ class BaseRequests
     	$link='https://'.$this->client->getDomain().'.amocrm.ru/api/v4/'.'tasks';
 	    $result = Curl::curl($link,$this->client->getAccessToken(), "POST", $data);
 	    // Сохранения id, только что созданной задачи в массив объекта экземпляра сущности
-	    $tasks->fields['id'] = $result['_embedded']['tasks'][0]['id'];
+	    $task->fields['id'] = $result['_embedded']['tasks'][0]['id'];
 	    $item->tasks->push($task);
-	    Aprint_r($item->tasks);
+	    Aprint_r($result);
 	}
 
 	// Прикрепление примечания к экземпляру сущност
@@ -109,12 +114,13 @@ class BaseRequests
 	        "note_type" => $note_type,
 	        "params" => $params
 		];
-		$note = new Notes();
+		$note = new Note();
 		$note->setFields($dataNote);
 		$data['add'] = $note->fields;
-		$item->notes = $note;
     	$link='https://'.$this->client->getDomain().'.amocrm.ru/api/v4/'.$this->entity.'/notes';
 	    $result = Curl::curl($link, $this->client->getAccessToken(), "POST", $data);
 	    $note->fields['id'] = $result['_embedded']['notes'][0]['id'];
+	    $item->notes->push($note);
+	   	Aprint_r($item->notes);
 	}
 }

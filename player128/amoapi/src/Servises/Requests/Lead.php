@@ -1,9 +1,9 @@
 <?php
-namespace Api\Library\AmoCrm\Services\Requests;
+namespace player128\AmoApi\Services\Requests;
 
-use Api\Library\AmoCrm\Entities\Lead as Elead;
-use Api\Library\AmoCrm\Entities\Task;
-use Api\Library\AmoCrm\Entities\Note;
+use player128\AmoApi\Entities\Lead as ELead;
+use player128\AmoApi\Entities\Task;
+use player128\AmoApi\Entities\Note;
 
 class Lead extends BaseRequests
 {
@@ -16,10 +16,15 @@ class Lead extends BaseRequests
 		$this->entity = 'leads';
 	}
 
-	public function createEntity($array)
+	public function createEntity($array = null)
 	{
 		$lead = new ELead();
 		if (isset($array)) $lead->setFields($array);
 		return $lead;
+	}
+
+	public function msgNotresult()
+	{
+		return 'Сделка не найдена.';
 	}
 }

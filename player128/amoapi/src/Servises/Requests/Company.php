@@ -1,11 +1,11 @@
 <?php
-namespace Api\Library\AmoCrm\Services\Requests;
+namespace player128\AmoApi\Services\Requests;
 
-use Api\Library\AmoCrm\Entities\Company;
-use Api\Library\AmoCrm\Entities\Task;
-use Api\Library\AmoCrm\Entities\Note;
+use player128\AmoApi\Entities\Company as ECompany;
+use player128\AmoApi\Entities\Task;
+use player128\AmoApi\Entities\Note;
 
-class Companies extends BaseRequests 
+class Company extends BaseRequests 
 {
 	protected $client;
 	protected $entity;
@@ -16,10 +16,15 @@ class Companies extends BaseRequests
 		$this->entity = 'companies';
 	}
 
-	public function createEntity($array)
+	public function createEntity($array = null)
 	{
-		$company = new Company();
+		$company = new ECompany();
 		if (isset($array)) $company->setFields($array);
 		return $company;
+	}
+
+	public function msgNotresult()
+	{
+		return 'Компания не найдена.';
 	}
 }

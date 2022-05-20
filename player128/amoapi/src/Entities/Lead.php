@@ -1,7 +1,7 @@
 <?php 
-namespace Api\Library\AmoCrm\Entities;
-use  Api\Library\AmoCrm\Services\CustomFields;
-use  Api\Library\AmoCrm\Collection\BaseCollection;
+namespace player128\AmoApi\Entities;
+use  player128\AmoApi\Services\CustomFields;
+use  player128\AmoApi\Collection\BaseCollection;
 
 class Lead extends Entity
 {

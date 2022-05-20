@@ -15,5 +15,6 @@ require_once('Servises/Requests/BaseRequests.php');
 require_once('Servises/Requests/Lead.php');
 require_once('Servises/Requests/Company.php');
 require_once('Servises/Requests/Contact.php');
+require_once('Tests/Tests.php');
 require_once('amo.php');
 

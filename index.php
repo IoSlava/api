@@ -1,6 +1,6 @@
 <?php
-use Api\Library\AmoCrm\AmoApi as Client;
-use function Api\Library\AmoCrm\Support\Aprint_r;
+use player128\AmoApi\AmoApi as Client;
+use function player128\AmoApi\Support\Aprint_r;
 define('ROOT', __DIR__);
 // Функция для 'красивого' вывода массиово и объектов
 include ROOT.'/config/amoCrm.php';
@@ -22,7 +22,16 @@ include ROOT.'/player128/amoapi/src/load.php';
 		// Создание объекта клиента и передача ему в конструктор данных для доступа к AmoCrm
 		if (getConfig('dlatestov')) $client = new Client(getConfig('dlatestov'),$code);
 		else exit('Что-то пошло не так');
-		$lead = $client->leads()->getById(28892901);//28892901
+		// $lead = $client->leads()->getById(28892901);//28892901
+
+		//46263893 - comp
+		//46263837 - cont
+		//28892901 - lead
+
+		$client->tests()->Test5($client, 3, 46263893, 'Новое задача.'); 
+		// Aprint_r($client->contacts()->getById(46263837));
+
+
 		$timeLoad = time() - $timeLoad;
 		echo "Время загрузки - ".$timeLoad. " сек.";
 	?>

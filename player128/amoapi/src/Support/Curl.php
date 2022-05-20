@@ -1,6 +1,6 @@
 <?php 
-namespace Api\Library\AmoCrm\Support;
-use Api\Library\AmoCrm\Error\Error;
+namespace player128\AmoApi\Support;
+use player128\AmoApi\Error\Error;
 
 class Curl
 {

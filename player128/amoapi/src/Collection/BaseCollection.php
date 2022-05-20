@@ -1,5 +1,5 @@
 <?php 
-namespace Api\Library\AmoCrm\Collection;
+namespace player128\AmoApi\Collection;
 
 class BaseCollection
 {

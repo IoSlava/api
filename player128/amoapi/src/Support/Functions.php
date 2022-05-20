@@ -1,5 +1,5 @@
 <?php 
-namespace Api\Library\AmoCrm\Support;
+namespace player128\AmoApi\Support;
 
 // Функция для 'красивого' вывода массиово и объектов
 function Aprint_r($array)

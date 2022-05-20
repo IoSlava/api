@@ -1,5 +1,5 @@
 <?php
-namespace Api\Library\AmoCrm\Entities;
+namespace player128\AmoApi\Entities;
 
 class Task 
 {

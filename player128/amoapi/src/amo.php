@@ -1,10 +1,11 @@
 <?php 
-namespace Api\Library\AmoCrm;
-use Api\Library\AmoCrm\Support\Curl;
-use Api\Library\AmoCrm\Services\Requests\Lead;
-use Api\Library\AmoCrm\Services\Requests\Contact;
-use Api\Library\AmoCrm\Services\Requests\Company;
-use function Api\Library\AmoCrm\Support\Aprint_r;
+namespace player128\AmoApi;
+use player128\AmoApi\Support\Curl;
+use player128\AmoApi\Services\Requests\Lead;
+use player128\AmoApi\Services\Requests\Contact;
+use player128\AmoApi\Services\Requests\Company;
+use function player128\AmoApi\Support\Aprint_r;
+use player128\AmoApi\Tests\Tests;
 
 class AmoApi 
 {
@@ -139,6 +140,24 @@ class AmoApi
 	{
 		$lead = new Lead($this);
 		return $lead;
+	}
+
+	public function companies()
+	{
+		$lead = new Company($this);
+		return $lead;
+	}
+
+	public function contacts()
+	{
+		$lead = new Contact($this);
+		return $lead;
+	}
+
+	public function tests()
+	{
+		$tests = new Tests();
+		return $tests;
 	}
 }
 

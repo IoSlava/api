@@ -1,9 +1,9 @@
 <?php
-namespace Api\Library\AmoCrm\Error;
+namespace player128\AmoApi\Error;
 
 use Exception;
-use function Api\Library\AmoCrm\Support\Aecho;
-use function Api\Library\AmoCrm\Support\Aprint_r;
+use function player128\AmoApi\Support\Aecho;
+use function player128\AmoApi\Support\Aprint_r;
 
 class Error 
 {

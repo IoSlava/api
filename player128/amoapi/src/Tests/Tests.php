@@ -1,8 +1,8 @@
 <?php
-namespace Api\Library\AmoCrm\Tests;
+namespace player128\AmoApi\Tests;
 
-use Api\Library\AmoCrm\AmoApi as Client;
-use function Api\Library\AmoCrm\Support\Aprint_r;
+use player128\AmoApi\AmoApi as Client;
+use function player128\AmoApi\Support\Aprint_r;
 
 class Tests
 {

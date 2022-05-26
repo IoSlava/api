@@ -2,7 +2,7 @@
 use player128\AmoApi\AmoApi as Client;
 use function player128\AmoApi\Support\Aprint_r;
 define('ROOT', __DIR__);
-// Функция для 'красивого' вывода массиово и объектов
+
 include ROOT.'/config/amoCrm.php';
 include ROOT.'/player128/amoapi/src/load.php';
 ?>
@@ -28,9 +28,8 @@ include ROOT.'/player128/amoapi/src/load.php';
 		//46263837 - cont
 		//28892901 - lead
 
-		$client->tests()->Test5($client, 3, 46263893, 'Новое задача.'); 
+		$client->tests()->Test6($client, 3, 46263893, 821947, 'XACV SQUAD', 0); 
 		// Aprint_r($client->contacts()->getById(46263837));
-
 
 		$timeLoad = time() - $timeLoad;
 		echo "Время загрузки - ".$timeLoad. " сек.";

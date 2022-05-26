@@ -14,6 +14,7 @@ class Tests
 	// Тесты на нахождение сущностей по id
 	public function Test1($client,$n,$id)
 	{
+		echo 'Тесты на нахождение сущностей по id<br>';
 		switch ($n){
 			case 1: 
 				$item = $client->leads()->getById($id);
@@ -32,6 +33,7 @@ class Tests
 	// Тесты на изменение полей сущностей
 	public function Test2($client,$n,$id,$name)
 	{
+		echo 'Тесты на изменение полей сущностей<br>';
 		switch ($n){
 			case 1: 
 				$item = $client->leads()->getById($id);
@@ -56,6 +58,7 @@ class Tests
 	// Тесты на создание сущностей 
 	public function Test3($client,$n,$name)
 	{
+		echo 'Тесты на создание сущностей <br>';
 		switch ($n){
 			case 1: 
 				$item = $client->leads()->create($name);
@@ -77,6 +80,7 @@ class Tests
 		$params = [
 			'text' => $text
 		];
+		echo 'Тесты на добавление примечания к сущностям <br>';
 		switch ($n){
 			case 1: 
 				$item = $client->leads()->getById($id);
@@ -98,6 +102,7 @@ class Tests
 	// Тесты на добавление задачи к сущностям
 	public function Test5($client,$n,$id,$text)
 	{
+		echo 'Тесты на добавление задачи к сущностям<br>';
 		switch ($n){
 			case 1: 
 				$item = $client->leads()->getById($id);
@@ -119,6 +124,7 @@ class Tests
 	// Тесты на изменение значения кастомного поля
 	public function Test6($client,$n,$id,$idCustom,$value,$index)
 	{
+		echo 'Тесты на изменение значения кастомного поля<br>';
 		switch ($n){
 			case 1: 
 				$item = $client->leads()->getById($id);

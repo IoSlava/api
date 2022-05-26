@@ -2,6 +2,7 @@
 namespace player128\AmoApi\Entities;
 use  player128\AmoApi\Support\CustomFields;
 use  player128\AmoApi\Collection\BaseCollection;
+use function player128\AmoApi\Support\Aprint_r;
 
 class Entity
 {
@@ -49,14 +50,16 @@ class Entity
 	public function updateCustomFieldById($id, $value, $index)
 	{
 		for ($i = 0; $i < sizeof($this->custom_fields); $i++){
-			if ($this->custom_fields[$i]->getId() == $id)$this->custom_fields[$i]->setValue($value,$index);
+			if ($this->custom_fields[$i]->getId() == $id)  return $this->custom_fields[$i]->setValue($value,$index);
 		}
+		echo "Поля с таким id не найдено";
 	}
 	// Изменения кастомного поля по наименованию
 	public function updateCustomFieldByName($name, $value, $index)
 	{
 		for ($i = 0; $i < sizeof($this->custom_fields); $i++) {
-			if ($this->custom_fields[$i]->getName() == $name)$this->custom_fields[$i]->setValue($value, $index);
+			if ($this->custom_fields[$i]->getName() == $name) return $this->custom_fields[$i]->setValue($value, $index);
 		}
+		echo "Поля с таким id не найдено";		
 	}
 }

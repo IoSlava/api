@@ -54,9 +54,12 @@ class BaseRequests
 		// Добавление изменений для кастомных полей
 		$data['update']['custom_fields_values'] = $item->getCustom();
 		$link='https://'.$this->client->getDomain().'.amocrm.ru/api/v4/'.$this->entity;
-		Aprint_r($data);
+		
+		//Aprint_r($item);
+		//Aprint_r($data);
+
 		$Response=Curl::curl($link, $this->client->getAccessToken(), "PATCH", $data);
-		Aprint_r($Response);
+		//Aprint_r($Response);
 		return true;
 	}
 

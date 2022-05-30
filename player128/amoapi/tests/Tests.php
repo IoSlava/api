@@ -1,5 +1,5 @@
 <?php
-namespace player128\AmoApi\Tests;
+namespace player128\Tests;
 
 use player128\AmoApi\AmoApi as Client;
 use function player128\AmoApi\Support\Aprint_r;

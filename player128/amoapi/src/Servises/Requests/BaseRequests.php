@@ -2,7 +2,6 @@
 namespace player128\AmoApi\Services\Requests;
 
 use function player128\AmoApi\Support\Aprint_r;
-use player128\AmoApi\Support\Curl;
 use player128\AmoApi\Entities\Task;
 use player128\AmoApi\Entities\Note;
 

@@ -22,13 +22,14 @@ include ROOT.'/player128/amoapi/src/load.php';
 		// Создание объекта клиента и передача ему в конструктор данных для доступа к AmoCrm
 		if (getConfig('dlatestov')) $client = new Client(getConfig('dlatestov'),$code);
 		else exit('Что-то пошло не так');
+		
 		// $lead = $client->leads()->getById(28892901);//28892901
 
 		//46263893 - comp
 		//46263837 - cont
 		//28892901 - lead
 
-		$client->tests()->Test6($client, 3, 46263893, 821947, 'XACV SQUAD', 0); 
+		//$client->tests()->Test6($client, 3, 46263893, 821947, 'XACV SQUAD', 0); 
 		// Aprint_r($client->contacts()->getById(46263837));
 
 		$timeLoad = time() - $timeLoad;

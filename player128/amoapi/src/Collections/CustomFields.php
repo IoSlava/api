@@ -1,5 +1,5 @@
 <?php
-namespace player128\AmoApi\Support;
+namespace player128\AmoApi\Collection;
 
 class CustomFields 
 {

@@ -42,7 +42,4 @@ class BaseCollection
 
 		return false;
 	}
-
-
-
 }

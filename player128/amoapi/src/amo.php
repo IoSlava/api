@@ -5,7 +5,7 @@ use player128\AmoApi\Services\Requests\Lead;
 use player128\AmoApi\Services\Requests\Contact;
 use player128\AmoApi\Services\Requests\Company;
 use function player128\AmoApi\Support\Aprint_r;
-use player128\AmoApi\Tests\Tests;
+use player128\Tests\Tests;
 
 class AmoApi 
 {

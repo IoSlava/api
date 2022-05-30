@@ -1,5 +1,5 @@
 <?php 
-namespace player128\AmoApi\Support;
+namespace player128\AmoApi\Services\Requests;
 use player128\AmoApi\Error\Error;
 
 class Curl

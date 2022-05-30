@@ -1,7 +1,5 @@
 <?php 
 namespace player128\AmoApi\Entities;
-use  player128\AmoApi\Services\CustomFields;
-use  player128\AmoApi\Collection\BaseCollection;
 
 class Lead extends Entity
 {

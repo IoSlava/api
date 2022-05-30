@@ -1,7 +1,7 @@
 <?php 
 namespace player128\AmoApi\Entities;
-use  player128\AmoApi\Support\CustomFields;
-use  player128\AmoApi\Collection\BaseCollection;
+use  player128\AmoApi\Collections\CustomFields;
+use  player128\AmoApi\Collections\BaseCollection;
 use function player128\AmoApi\Support\Aprint_r;
 
 class Entity
